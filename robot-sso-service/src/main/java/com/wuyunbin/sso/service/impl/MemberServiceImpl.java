@@ -13,11 +13,13 @@ import com.wuyunbin.sso.service.MemberService;
 import com.wuyunbin.sso.wechat.WeChatAPI;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -33,6 +35,9 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
 
     @Resource
     private RestTemplate restTemplate;
+
+    @Resource
+    private RedisTemplate<String,String> redisTemplate;
 
 
     @Resource
@@ -77,6 +82,9 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
     public void sendCode(String phone) {
         Random random=new Random();
         String code=random.nextInt(8888)+1000+"";
+
+        //todo 缓存验证码
+        redisTemplate.opsForValue().set("code",code,60, TimeUnit.SECONDS);
 
         log.info("验证码是：{}",code);
     }
