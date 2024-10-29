@@ -5,10 +5,7 @@ import com.wuyunbin.sso.dto.WeChatLoginDTO;
 import com.wuyunbin.sso.service.MemberService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -31,5 +28,12 @@ public class MemberController {
         log.info("{}", weChatLoginDTO);
         String token = memberService.loginByWeChat(weChatLoginDTO);
         return Result.success(token);
+    }
+
+    @GetMapping("getCode/{phone}")
+    public Result<Object> getCode(@PathVariable String phone){
+        log.info("phone:{}",phone);
+        memberService.sendCode(phone);
+        return Result.success();
     }
 }

@@ -15,4 +15,6 @@ import com.wuyunbin.sso.entity.Member;
 public interface MemberService extends IService<Member> {
 
     String loginByWeChat(WeChatLoginDTO weChatLoginDTO);
+
+    void sendCode(String phone);
 }

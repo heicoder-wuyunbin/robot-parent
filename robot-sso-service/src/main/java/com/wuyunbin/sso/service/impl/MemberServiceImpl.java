@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
+import java.util.Random;
 
 /**
  * <p>
@@ -70,5 +71,13 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
         //签发token
 
         return "token";
+    }
+
+    @Override
+    public void sendCode(String phone) {
+        Random random=new Random();
+        String code=random.nextInt(8888)+1000+"";
+
+        log.info("验证码是：{}",code);
     }
 }
