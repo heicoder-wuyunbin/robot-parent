@@ -85,6 +85,9 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
 
         //todo 缓存验证码
         redisTemplate.opsForValue().set("code",code,60, TimeUnit.SECONDS);
+        //获取redis中的验证码
+        String s = redisTemplate.opsForValue().get("code");
+        log.info("redis中获取的验证码是：{}",s);
 
         log.info("验证码是：{}",code);
     }
