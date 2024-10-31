@@ -2,13 +2,16 @@ package com.wuyunbin.sso.controller;
 
 import com.wuyunbin.sso.common.Result;
 import com.wuyunbin.sso.dto.LoginDTO;
-import com.wuyunbin.sso.dto.WeChatLoginDTO;
+//import com.wuyunbin.sso.dto.WeChatLoginDTO;
 import com.wuyunbin.sso.service.MemberService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * <p>
@@ -23,34 +26,48 @@ import java.util.HashMap;
 @RequestMapping("/member")
 public class MemberController {
 
-    @Resource
-    private MemberService memberService;
+//    @Resource(name="memberServiceImplByPhone")
+//    private MemberService memberService;
+
+    /*
+    泛型中String位置（key位置)实际就是service实现类的对象名字
+     */
+    @Autowired
+    private Map<String,MemberService> memberServiceHashMap;
 
     @PostMapping("login")
     public Result<HashMap<String, Object>> login(@RequestBody LoginDTO loginDTO) {
         log.info("loginDTO:{}", loginDTO);
-        String token = memberService.login(loginDTO);
+        //String token = memberService.login(loginDTO);
+
+//        memberServiceHashMap.forEach((k,v)->{
+//            log.info("{},{}",k,v);
+//        });
+
+        MemberService memberService = memberServiceHashMap.get(loginDTO.getType());
+        String token =memberService.login(loginDTO);
+
         HashMap<String, Object> map=new HashMap<>();
         return Result.success(map);
     }
 
-    @PostMapping("loginByWeChat")
-    public Result<String> loginByWeChat(@RequestBody WeChatLoginDTO weChatLoginDTO) {
-        log.info("{}", weChatLoginDTO);
-        String token = memberService.loginByWeChat(weChatLoginDTO);
-        return Result.success(token);
-    }
+//    @PostMapping("loginByWeChat")
+//    public Result<String> loginByWeChat(@RequestBody WeChatLoginDTO weChatLoginDTO) {
+//        log.info("{}", weChatLoginDTO);
+//        String token = memberService.loginByWeChat(weChatLoginDTO);
+//        return Result.success(token);
+//    }
 
     @GetMapping("getCode/{phone}")
     public Result<Object> getCode(@PathVariable String phone){
         log.info("phone:{}",phone);
-        memberService.sendCode(phone);
+        //memberService.sendCode(phone);
         return Result.success();
     }
 
-    @PostMapping("login/phone")
-    public void loginByPhone(@RequestBody LoginDTO loginDTO){
-        log.info("loginDTO:{}",loginDTO);
-        memberService.login(loginDTO);
-    }
+//    @PostMapping("login/phone")
+//    public void loginByPhone(@RequestBody LoginDTO loginDTO){
+//        log.info("loginDTO:{}",loginDTO);
+//        memberService.login(loginDTO);
+//    }
 }
