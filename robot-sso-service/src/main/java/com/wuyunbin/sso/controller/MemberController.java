@@ -26,6 +26,10 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequestMapping("/member")
 public class MemberController {
 
+    public MemberController(){
+        System.out.println("controller...");
+    }
+
 //    @Resource(name="memberServiceImplByPhone")
 //    private MemberService memberService;
 
