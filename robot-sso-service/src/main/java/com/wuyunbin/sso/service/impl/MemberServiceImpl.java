@@ -84,10 +84,14 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
         Random random=new Random();
         String code=random.nextInt(8888)+1000+"";
 
-        //todo 缓存验证码
-        redisTemplate.opsForValue().set("code",code,60, TimeUnit.SECONDS);
+        /*
+        todo 缓存验证码
+        redis编排方式： 项目名:模块名:场景名:特征码
+         */
+        String key="robot:sso:login:"+phone;
+        redisTemplate.opsForValue().set(key,code,360, TimeUnit.SECONDS);
         //获取redis中的验证码
-        String s = redisTemplate.opsForValue().get("code");
+        String s = redisTemplate.opsForValue().get(key);
         log.info("redis中获取的验证码是：{}",s);
 
         log.info("验证码是：{}",code);
