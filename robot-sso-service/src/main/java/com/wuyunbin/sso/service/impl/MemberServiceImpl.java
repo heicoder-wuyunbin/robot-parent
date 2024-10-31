@@ -4,8 +4,9 @@ import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wuyunbin.sso.bo.OpenIdBO;
-import com.wuyunbin.sso.bo.WeChatAccessToken;
+import com.wuyunbin.sso.common.Result;
 import com.wuyunbin.sso.config.WeChatConfig;
+import com.wuyunbin.sso.dto.LoginDTO;
 import com.wuyunbin.sso.dto.WeChatLoginDTO;
 import com.wuyunbin.sso.entity.Member;
 import com.wuyunbin.sso.mapper.MemberMapper;
@@ -16,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Optional;
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -79,5 +80,21 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
         String code=random.nextInt(8888)+1000+"";
 
         log.info("验证码是：{}",code);
+    }
+
+    @Override
+    public String login(LoginDTO loginDTO) {
+        Member member = this.lambdaQuery()
+                .eq(Member::getPhone, loginDTO.getPhone())
+                .one();
+        if(member==null){
+            Member newMemeber=new Member();
+            newMemeber.setPhone(loginDTO.getPhone());
+            this.save(newMemeber);
+        }
+
+
+
+        return "token:oj8k";
     }
 }
