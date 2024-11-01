@@ -30,9 +30,6 @@ public class MemberController {
         System.out.println("controller...");
     }
 
-//    @Resource(name="memberServiceImplByPhone")
-//    private MemberService memberService;
-
     /*
     泛型中String位置（key位置)实际就是service实现类的对象名字
      */
@@ -42,36 +39,21 @@ public class MemberController {
     @PostMapping("login")
     public Result<HashMap<String, Object>> login(@RequestBody LoginDTO loginDTO) {
         log.info("loginDTO:{}", loginDTO);
-        //String token = memberService.login(loginDTO);
-
-//        memberServiceHashMap.forEach((k,v)->{
-//            log.info("{},{}",k,v);
-//        });
 
         MemberService memberService = memberServiceHashMap.get(loginDTO.getType());
         String token =memberService.login(loginDTO);
 
         HashMap<String, Object> map=new HashMap<>();
+        map.put("token",token);
         return Result.success(map);
     }
-
-//    @PostMapping("loginByWeChat")
-//    public Result<String> loginByWeChat(@RequestBody WeChatLoginDTO weChatLoginDTO) {
-//        log.info("{}", weChatLoginDTO);
-//        String token = memberService.loginByWeChat(weChatLoginDTO);
-//        return Result.success(token);
-//    }
 
     @GetMapping("getCode/{phone}")
     public Result<Object> getCode(@PathVariable String phone){
         log.info("phone:{}",phone);
-        //memberService.sendCode(phone);
+        memberService.sendCode(phone);
         return Result.success();
     }
 
-//    @PostMapping("login/phone")
-//    public void loginByPhone(@RequestBody LoginDTO loginDTO){
-//        log.info("loginDTO:{}",loginDTO);
-//        memberService.login(loginDTO);
-//    }
+
 }

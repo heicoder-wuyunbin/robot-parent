@@ -5,12 +5,22 @@ import com.wuyunbin.sso.dto.LoginDTO;
 import com.wuyunbin.sso.entity.Member;
 import com.wuyunbin.sso.mapper.MemberMapper;
 import com.wuyunbin.sso.service.MemberService;
+import com.wuyunbin.sso.utils.JwtUtil;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+
+/**
+ * @author wuyunbin
+ */
 @Slf4j
 @Service("memberServiceImplByPhone")
 public class MemberServiceImplByPhone extends ServiceImpl<MemberMapper, Member> implements MemberService {
+    @Resource
+    private JwtUtil jwtUtil;
+
     @Override
     public void sendCode(String phone) {
         throw new RuntimeException("手机号加密码方式不需要发送验证码");
@@ -30,7 +40,10 @@ public class MemberServiceImplByPhone extends ServiceImpl<MemberMapper, Member> 
         if (!member.getPassword().equals(loginDTO.getPassword())) {
             throw new RuntimeException("未注册的用户或者密码不正确");
         }
-        return "token:oj8k";
+        HashMap<String,Object> map=new HashMap<>();
+        map.put("id",member.getId());
+        String token = jwtUtil.createToken(map);
+        return token;
 
     }
 }

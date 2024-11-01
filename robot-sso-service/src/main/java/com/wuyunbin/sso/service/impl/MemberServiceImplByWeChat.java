@@ -9,6 +9,7 @@ import com.wuyunbin.sso.dto.LoginDTO;
 import com.wuyunbin.sso.entity.Member;
 import com.wuyunbin.sso.mapper.MemberMapper;
 import com.wuyunbin.sso.service.MemberService;
+import com.wuyunbin.sso.utils.JwtUtil;
 import com.wuyunbin.sso.wechat.WeChatAPI;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -16,12 +17,19 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
+
+/**
+ * @author wuyunbin
+ */
 @Slf4j
 @Service("memberServiceImplByWeChat")
 public class MemberServiceImplByWeChat extends ServiceImpl<MemberMapper, Member> implements MemberService {
     @Resource
     private RestTemplate restTemplate;
 
+    @Resource
+    private JwtUtil jwtUtil;
 
     @Resource
     private WeChatConfig weChatConfig;
@@ -56,8 +64,9 @@ public class MemberServiceImplByWeChat extends ServiceImpl<MemberMapper, Member>
         }
 
         //签发token
-
-        return "token";
-
+        HashMap<String,Object> map=new HashMap<>();
+        map.put("id",member.getId());
+        String token = jwtUtil.createToken(map);
+        return token;
     }
 }
