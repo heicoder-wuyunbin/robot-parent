@@ -51,7 +51,7 @@ public class MemberController {
     @GetMapping("getCode/{phone}")
     public Result<Object> getCode(@PathVariable String phone){
         log.info("phone:{}",phone);
-        memberService.sendCode(phone);
+        //memberService.sendCode(phone);
         return Result.success();
     }
 
