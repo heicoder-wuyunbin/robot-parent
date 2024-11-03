@@ -54,3 +54,19 @@ CREATE TABLE `member`
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='会员表';
+
+CREATE TABLE `merchant`
+(
+    `id`              char(20)     NOT NULL DEFAULT '' COMMENT '会员id',
+    `phone`           varchar(15)  NOT NULL DEFAULT '' COMMENT '电话',
+    `password`        varchar(150) NOT NULL DEFAULT '' COMMENT '密码',
+    `last_login_ip`   char(20)     NOT NULL DEFAULT '' COMMENT '最后登录ip',
+    `last_login_time` datetime              DEFAULT NULL COMMENT '最后登录时间',
+    `open_id`         char(50)     NOT NULL DEFAULT '' COMMENT '微信open_id',
+    `union_id`        char(50)     NOT NULL DEFAULT '' COMMENT '微信union_id',
+    `status`          char(1)      NOT NULL DEFAULT '1' COMMENT '状态 0-禁用 1-启用',
+    `created_at`      datetime              DEFAULT NULL COMMENT '创建时间',
+    `updated_at`      datetime              DEFAULT NULL COMMENT '最后更新时间',
+    `deleted_at`      int(1)       NOT NULL DEFAULT 0 COMMENT '删除时间',
+    PRIMARY KEY (`id`)
+) COMMENT ='商户表';
