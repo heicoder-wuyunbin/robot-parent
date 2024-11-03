@@ -224,7 +224,6 @@ DROP TABLE IF EXISTS `settlement`;
 CREATE TABLE `settlement`
 (
     `id`              varchar(20)    NOT NULL DEFAULT '' COMMENT '结算总表id',
-    `agent_id`        varchar(20)    NOT NULL DEFAULT '' COMMENT '代理商id',
     `amount`          decimal(10, 2) NOT NULL DEFAULT '' COMMENT '结算金额',
     `settlement_date` date           NOT NULL DEFAULT '' COMMENT '结算日期',
     `status`          char(1)        NOT NULL DEFAULT '' COMMENT '0-未提现 1-已提现',
@@ -242,12 +241,9 @@ CREATE TABLE `settlement_details`
     `member_id`       char(20)       NOT NULL DEFAULT '' COMMENT '会员id',
     `merchant_id`      char(20)       NOT NULL DEFAULT '' COMMENT '商家id',
     `store_id`        char(20)       NOT NULL DEFAULT '' COMMENT '店铺id',
-    `member_grade`    char(1)        NOT NULL DEFAULT '' COMMENT '会员等级',
     `price`           decimal(10, 2) NOT NULL DEFAULT '' COMMENT '小票金额',
-    `rate`            double(3, 2)   NOT NULL DEFAULT '' comment '折扣',
     `discount_amount` decimal(10, 2) NOT NULL DEFAULT '' COMMENT '折扣金额',
     `pay_amount`      decimal(10, 2) NOT NULL DEFAULT '' COMMENT '实付金额',
-    `total_revenue`   decimal(10, 2) NOT NULL DEFAULT '' COMMENT '总收益',
     `revenue`         decimal(10, 2) NOT NULL DEFAULT '' COMMENT '平台收益',
     `principal`       decimal(10, 2) NOT NULL DEFAULT '' COMMENT '本金',
     `created_at`      datetime                DEFAULT '' COMMENT '创建时间',
