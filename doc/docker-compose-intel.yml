@@ -1,0 +1,28 @@
+version: '3'
+services:
+  redis:
+    container_name: redis
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    restart: always
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3.11.0-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: always
+  nacos:
+    container_name: nacos
+    image: nacos/nacos-server:v2.1.0-slim
+    ports:
+      - "8848:8848"
+      - "9848:9848"
+      - "9849:9849"
+    privileged: true
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - MODE=standalone
+      - PREFER_HOST_MODE=hostname
