@@ -4,6 +4,7 @@ import com.wuyunbin.common.Result;
 import com.wuyunbin.sso.dto.LoginDTO;
 import com.wuyunbin.sso.dto.SendSmsDTO;
 import com.wuyunbin.sso.entity.Member;
+import com.wuyunbin.sso.enums.AuthType;
 import com.wuyunbin.sso.service.MemberAuthService;
 import com.wuyunbin.sso.service.MemberService;
 import jakarta.annotation.Resource;
@@ -49,8 +50,8 @@ public class MemberController {
     @PostMapping("getCode")
     public Result<Object> getCode(@RequestBody SendSmsDTO sendSmsDTO){
 
-        MemberAuthService memberService = memberAuthServiceHashMap.get("memberServiceImplByCode");
-        memberService.sendCode(sendSmsDTO.getPhone());
+        MemberAuthService memberAuthService = memberAuthServiceHashMap.get(AuthType.VERIFICATION_CODE.getClassName());
+        memberAuthService.sendCode(sendSmsDTO.getPhone());
         //todo 记录场景使用次数
         return Result.success();
     }
