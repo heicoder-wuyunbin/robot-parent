@@ -26,3 +26,16 @@ services:
       - TZ=Asia/Shanghai
       - MODE=standalone
       - PREFER_HOST_MODE=hostname
+  mysql:
+    container_name: mysql
+    image: mysql:8.0.29
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - TZ=Asia/Shanghai
+      - MYSQL_CHARSET=utf8mb4
+      - MYSQL_COLLATION=utf8mb4_general_ci
+      - MYSQL_ROOT_HOST=%
+    ports:
+      - "3306:3306"
+    privileged: true
+    restart: always
