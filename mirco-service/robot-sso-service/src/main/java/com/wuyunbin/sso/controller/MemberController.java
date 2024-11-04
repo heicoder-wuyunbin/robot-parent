@@ -3,7 +3,10 @@ package com.wuyunbin.sso.controller;
 import com.wuyunbin.common.Result;
 import com.wuyunbin.sso.dto.LoginDTO;
 import com.wuyunbin.sso.dto.SendSmsDTO;
+import com.wuyunbin.sso.entity.Member;
 import com.wuyunbin.sso.service.MemberAuthService;
+import com.wuyunbin.sso.service.MemberService;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +25,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/member")
 public class MemberController {
+    @Resource
+    private MemberService memberService;
+
     private final Map<String,MemberAuthService> memberAuthServiceHashMap;
 
     public MemberController(Map<String, MemberAuthService> memberAuthServiceHashMap){
@@ -50,7 +56,8 @@ public class MemberController {
     }
 
     @GetMapping("findByToken")
-    public void findByToken(){
-
+    public Result<Member> findByToken(){
+        Member member =memberService.findByToken();
+        return Result.success(member);
     }
 }

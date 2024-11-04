@@ -16,5 +16,5 @@ import com.wuyunbin.sso.entity.Member;
 public interface MemberService extends IService<Member> {
 
 
-
+    Member findByToken();
 }
