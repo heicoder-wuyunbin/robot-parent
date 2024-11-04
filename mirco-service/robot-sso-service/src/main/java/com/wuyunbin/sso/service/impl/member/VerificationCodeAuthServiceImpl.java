@@ -1,9 +1,8 @@
-package com.wuyunbin.sso.service.impl;
+package com.wuyunbin.sso.service.impl.member;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wuyunbin.sso.dto.LoginDTO;
 import com.wuyunbin.sso.entity.Member;
-import com.wuyunbin.sso.mapper.MemberMapper;
+import com.wuyunbin.sso.service.MemberAuthService;
 import com.wuyunbin.sso.service.MemberService;
 import com.wuyunbin.sso.utils.JwtUtil;
 import jakarta.annotation.Resource;
@@ -20,8 +19,8 @@ import java.util.concurrent.TimeUnit;
  * @author wuyunbin
  */
 @Slf4j
-@Service("memberServiceImplByCode")
-public class MemberServiceImplByCode extends ServiceImpl<MemberMapper, Member> implements MemberService {
+@Service("verificationCodeAuthService")
+public class VerificationCodeAuthServiceImpl implements MemberAuthService {
     @Resource
     private RedisTemplate<String, String> redisTemplate;
     @Resource
@@ -29,6 +28,9 @@ public class MemberServiceImplByCode extends ServiceImpl<MemberMapper, Member> i
 
     @Resource
     private RabbitTemplate rabbitTemplate;
+
+    @Resource
+    private MemberService memberService;
 
     @Override
     public void sendCode(String phone) {
@@ -49,7 +51,7 @@ public class MemberServiceImplByCode extends ServiceImpl<MemberMapper, Member> i
     @Override
     public String login(LoginDTO loginDTO) {
         log.info("短信验证码方式...");
-        Member member = this.lambdaQuery()
+        Member member = memberService.lambdaQuery()
                 .eq(Member::getPhone, loginDTO.getPhone())
                 .one();
 
@@ -68,7 +70,7 @@ public class MemberServiceImplByCode extends ServiceImpl<MemberMapper, Member> i
             member=new Member();
             member.setPhone(loginDTO.getPhone());
             //存入新用户
-            this.save(member);
+            memberService.save(member);
         }
 
         //签发token

@@ -1,9 +1,8 @@
-package com.wuyunbin.sso.service.impl;
+package com.wuyunbin.sso.service.impl.member;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wuyunbin.sso.dto.LoginDTO;
 import com.wuyunbin.sso.entity.Member;
-import com.wuyunbin.sso.mapper.MemberMapper;
+import com.wuyunbin.sso.service.MemberAuthService;
 import com.wuyunbin.sso.service.MemberService;
 import com.wuyunbin.sso.utils.JwtUtil;
 import jakarta.annotation.Resource;
@@ -16,10 +15,13 @@ import java.util.HashMap;
  * @author wuyunbin
  */
 @Slf4j
-@Service("memberServiceImplByPhone")
-public class MemberServiceImplByPhone extends ServiceImpl<MemberMapper, Member> implements MemberService {
+@Service("passwordAuthService")
+public class PasswordAuthServiceImpl implements MemberAuthService {
     @Resource
     private JwtUtil jwtUtil;
+
+    @Resource
+    private MemberService memberService;
 
     @Override
     public void sendCode(String phone) {
@@ -30,7 +32,7 @@ public class MemberServiceImplByPhone extends ServiceImpl<MemberMapper, Member> 
     public String login(LoginDTO loginDTO) {
 
         log.info("账号密码登录方式....");
-        Member member = this.lambdaQuery()
+        Member member = memberService.lambdaQuery()
                 .eq(Member::getPhone, loginDTO.getPhone())
                 .one();
         if (member == null) {
@@ -42,8 +44,7 @@ public class MemberServiceImplByPhone extends ServiceImpl<MemberMapper, Member> 
         }
         HashMap<String,Object> map=new HashMap<>();
         map.put("id",member.getId());
-        String token = jwtUtil.createToken(map);
-        return token;
+        return jwtUtil.createToken(map);
 
     }
 }

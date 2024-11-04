@@ -2,7 +2,7 @@ package com.wuyunbin.sso.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.wuyunbin.sso.dto.LoginDTO;
-//import com.wuyunbin.sso.dto.WeChatLoginDTO;
+
 import com.wuyunbin.sso.entity.Member;
 
 /**
@@ -15,9 +15,6 @@ import com.wuyunbin.sso.entity.Member;
  */
 public interface MemberService extends IService<Member> {
 
-    //String loginByWeChat(WeChatLoginDTO weChatLoginDTO);
 
-    void sendCode(String phone);
 
-    String login(LoginDTO loginDTO);
 }
