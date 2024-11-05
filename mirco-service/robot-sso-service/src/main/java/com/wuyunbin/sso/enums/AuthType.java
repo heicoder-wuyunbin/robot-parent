@@ -2,6 +2,10 @@ package com.wuyunbin.sso.enums;
 
 import lombok.Getter;
 
+/**
+ * @author wuyunbin
+ */
+
 @Getter
 public enum AuthType {
     WECHAT("weChat", "weChatAuthService"),

@@ -1,6 +1,6 @@
-drop database if exists ad;
-create database ad charset utf8mb4;
-use ad;
+drop database if exists robot_ad;
+create database robot_ad charset utf8mb4;
+use robot_ad;
 
 DROP TABLE IF EXISTS `ad`;
 CREATE TABLE `ad`
