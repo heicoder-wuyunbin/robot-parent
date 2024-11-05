@@ -1,5 +1,6 @@
 package com.wuyunbin.sso.service.impl.member;
 
+import com.alibaba.fastjson2.JSON;
 import com.wuyunbin.sso.dto.LoginDTO;
 import com.wuyunbin.sso.entity.Member;
 import com.wuyunbin.sso.service.MemberAuthService;
@@ -71,6 +72,13 @@ public class VerificationCodeAuthServiceImpl implements MemberAuthService {
             member.setPhone(loginDTO.getPhone());
             //存入新用户
             memberService.save(member);
+            //推入队列
+            HashMap<String,Object> map=new HashMap<>();
+            map.put("id",member.getId());
+            map.put("phone",member.getPhone());
+            String str = JSON.toJSONString(map);
+            log.info("json字符串:{}",str);
+            rabbitTemplate.convertAndSend("info",str);
         }
 
         //签发token

@@ -13,6 +13,7 @@
     <modules>
         <module>robot-base-service</module>
         <module>robot-sso-service</module>
+        <module>robot-member-service</module>
     </modules>
 
     <parent>
