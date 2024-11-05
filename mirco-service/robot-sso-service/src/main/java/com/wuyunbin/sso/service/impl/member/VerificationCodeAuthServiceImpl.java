@@ -1,6 +1,8 @@
 package com.wuyunbin.sso.service.impl.member;
 
 import com.alibaba.fastjson2.JSON;
+import com.wuyunbin.member.api.MemberInfoClient;
+import com.wuyunbin.member.entity.MemberInfo;
 import com.wuyunbin.sso.dto.LoginDTO;
 import com.wuyunbin.sso.entity.Member;
 import com.wuyunbin.sso.service.MemberAuthService;
@@ -32,6 +34,9 @@ public class VerificationCodeAuthServiceImpl implements MemberAuthService {
 
     @Resource
     private MemberService memberService;
+
+    @Resource
+    private MemberInfoClient memberInfoClient;
 
     @Override
     public void sendCode(String phone) {
@@ -72,13 +77,18 @@ public class VerificationCodeAuthServiceImpl implements MemberAuthService {
             member.setPhone(loginDTO.getPhone());
             //存入新用户
             memberService.save(member);
-            //推入队列
-            HashMap<String,Object> map=new HashMap<>();
-            map.put("id",member.getId());
-            map.put("phone",member.getPhone());
-            String str = JSON.toJSONString(map);
-            log.info("json字符串:{}",str);
-            rabbitTemplate.convertAndSend("info",str);
+//            //推入队列
+//            HashMap<String,Object> map=new HashMap<>();
+//            map.put("id",member.getId());
+//            map.put("phone",member.getPhone());
+//            String str = JSON.toJSONString(map);
+//            log.info("json字符串:{}",str);
+//            rabbitTemplate.convertAndSend("info",str);
+
+            MemberInfo memberInfo=new MemberInfo();
+            memberInfo.setId(member.getId());
+            memberInfo.setPhone(member.getPhone());
+            memberInfoClient.save(memberInfo);
         }
 
         //签发token

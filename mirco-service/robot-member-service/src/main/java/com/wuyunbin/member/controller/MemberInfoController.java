@@ -28,7 +28,8 @@ public class MemberInfoController {
 
     @PostMapping("")
     public Result<Object> save(@RequestBody MemberInfo memberInfo){
-        memberInfoService.save(memberInfo);
+        log.info("memberInfo:{}",memberInfo);
+        //memberInfoService.save(memberInfo);
         return Result.success();
     }
 

@@ -28,6 +28,12 @@
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-jackson</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.wuyunbin</groupId>
+            <artifactId>robot-member-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
