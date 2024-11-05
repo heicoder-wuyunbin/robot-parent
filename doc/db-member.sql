@@ -102,7 +102,7 @@ CREATE TABLE `bean_logs`
     `store_id`      varchar(20)  NOT NULL DEFAULT '' COMMENT '店铺id',
     `merchant_id`   varchar(20)  NOT NULL DEFAULT '' COMMENT '商家id',
     `store_name`    varchar(20)  NOT NULL DEFAULT '' COMMENT '店铺名称',
-    `area_id`       varchar(20)  NOT NULL DEFAULT '' COMMENT '区域id,用于查询代理商',
+    `area_id`       varchar(20)  NOT NULL DEFAULT '' COMMENT '区域id',
     `beans`         int(11)      NOT NULL DEFAULT '0' COMMENT '码豆数量',
     `type`          char(1)      NOT NULL DEFAULT '0' COMMENT '0-获得 1-消费',
     `remark`        varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
