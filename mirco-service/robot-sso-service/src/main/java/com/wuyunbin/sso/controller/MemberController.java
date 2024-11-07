@@ -1,6 +1,7 @@
 package com.wuyunbin.sso.controller;
 
 import com.wuyunbin.common.Result;
+import com.wuyunbin.member.entity.MemberInfo;
 import com.wuyunbin.sso.dto.LoginDTO;
 import com.wuyunbin.sso.dto.SendSmsDTO;
 import com.wuyunbin.sso.entity.Member;
@@ -57,8 +58,8 @@ public class MemberController {
     }
 
     @GetMapping("findByToken")
-    public Result<Member> findByToken(){
-        Member member =memberService.findByToken();
-        return Result.success(member);
+    public Result<MemberInfo> findByToken(){
+        MemberInfo memberInfo =memberService.findByToken();
+        return Result.success(memberInfo);
     }
 }

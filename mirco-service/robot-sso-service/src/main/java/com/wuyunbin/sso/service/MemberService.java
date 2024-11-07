@@ -1,6 +1,7 @@
 package com.wuyunbin.sso.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.wuyunbin.member.entity.MemberInfo;
 import com.wuyunbin.sso.dto.LoginDTO;
 
 import com.wuyunbin.sso.entity.Member;
@@ -16,5 +17,5 @@ import com.wuyunbin.sso.entity.Member;
 public interface MemberService extends IService<Member> {
 
 
-    Member findByToken();
+    MemberInfo findByToken();
 }

@@ -7,7 +7,7 @@ CREATE TABLE `merchant_apply`
 (
     `id`               char(20)       NOT NULL DEFAULT '' COMMENT '商家入驻申请表id',
     `member_id`        char(20)       NOT NULL DEFAULT '' COMMENT '会员id',
-    `contract`         varchar(20)    NOT NULL DEFAULT '' COMMENT '联系人',
+    `contract`         varchar(20)    NOT NULL DEFAULT '' COMMENT '联系人手机',
     `id_card`          char(20)       NOT NULL DEFAULT '' COMMENT '身份证号码',
     `phone`            varchar(18)    NOT NULL DEFAULT '' COMMENT '联系电话',
     `email`            varchar(255)   NOT NULL DEFAULT '' COMMENT '邮箱',

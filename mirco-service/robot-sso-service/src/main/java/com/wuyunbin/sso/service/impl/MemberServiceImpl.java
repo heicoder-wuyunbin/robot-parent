@@ -1,6 +1,8 @@
 package com.wuyunbin.sso.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.wuyunbin.member.api.MemberInfoClient;
+import com.wuyunbin.member.entity.MemberInfo;
 import com.wuyunbin.sso.entity.Member;
 import com.wuyunbin.sso.mapper.MemberMapper;
 import com.wuyunbin.sso.service.MemberService;
@@ -30,8 +32,11 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
     @Resource
     private JwtUtil jwtUtil;
 
+    @Resource
+    private MemberInfoClient memberInfoClient;
+
     @Override
-    public Member findByToken() {
+    public MemberInfo findByToken() {
         String token = request.getHeader("Authorization");
         if (token.isBlank()) {
             throw new RuntimeException("token丢失");
@@ -43,7 +48,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
         }
         Claims claims = jwtUtil.parseToken(token);
         String id = claims.get("id", String.class);
-
-        return this.getById(id);
+        MemberInfo memberInfo=memberInfoClient.getInfoById(id);
+        return memberInfo;
     }
 }
