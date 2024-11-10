@@ -20,6 +20,12 @@
             <artifactId>robot-apply-model</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.wuyunbin</groupId>
+            <artifactId>robot-sso-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 

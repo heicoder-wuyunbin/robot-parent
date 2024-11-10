@@ -13,4 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface MerchantApplyService extends IService<MerchantApply> {
 
+    void apply(MerchantApply merchantApply);
 }

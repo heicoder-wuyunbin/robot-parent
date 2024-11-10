@@ -18,6 +18,7 @@
 
     <modules>
         <module>robot-member-api</module>
+        <module>robot-sso-api</module>
     </modules>
 
     <dependencies>

@@ -10,6 +10,7 @@ import com.wuyunbin.sso.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
  * @author wuyunbin
  * @since 2024-10-27
  */
+@Slf4j
 @Service
 public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> implements MemberService {
 
@@ -50,5 +52,18 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
         String id = claims.get("id", String.class);
         MemberInfo memberInfo=memberInfoClient.getInfoById(id);
         return memberInfo;
+    }
+
+    @Override
+    public String getMemberIdByToken(String token) {
+        token = token.replace("Bearer ", "");
+        String valid = jwtUtil.validateToken(token);
+        if (!"Valid".equals(valid)) {
+            throw new RuntimeException("token异常");
+        }
+        Claims claims = jwtUtil.parseToken(token);
+        String id = claims.get("id", String.class);
+        log.info("id:{}",id);
+        return id;
     }
 }
