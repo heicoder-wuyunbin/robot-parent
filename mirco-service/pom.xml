@@ -14,6 +14,8 @@
         <module>robot-base-service</module>
         <module>robot-sso-service</module>
         <module>robot-member-service</module>
+        <module>robot-apply-service</module>
+        <module>robot-merchant-service</module>
     </modules>
 
     <parent>

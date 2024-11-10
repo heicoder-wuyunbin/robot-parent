@@ -19,7 +19,7 @@ import java.util.Scanner;
 public class MyBatisPlusGenerator {
 
     //todo：修改这里的数据库名到自己的数据库中
-    private static String URL = "jdbc:mysql://localhost:3306/robot_member?useSSL=false";
+    private static String URL = "jdbc:mysql://localhost:3306/robot_merchant?useSSL=false";
     private static String USERNAME = "root";
     private static String PASSWORD = "root";
 

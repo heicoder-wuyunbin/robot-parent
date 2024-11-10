@@ -18,6 +18,7 @@
 
     <modules>
         <module>robot-member-model</module>
+        <module>robot-merchant-model</module>
     </modules>
 
     <dependencies>
