@@ -55,7 +55,11 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
     }
 
     @Override
-    public String getMemberIdByToken(String token) {
+    public String getMemberIdByToken() {
+        String token = request.getHeader("Authorization");
+        if (token.isBlank()) {
+            throw new RuntimeException("token丢失");
+        }
         token = token.replace("Bearer ", "");
         String valid = jwtUtil.validateToken(token);
         if (!"Valid".equals(valid)) {

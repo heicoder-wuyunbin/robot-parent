@@ -19,5 +19,5 @@ public interface MemberService extends IService<Member> {
 
     MemberInfo findByToken();
 
-    String getMemberIdByToken(String token);
+    String getMemberIdByToken();
 }

@@ -15,8 +15,8 @@ public class MemberApi {
     @Resource
     private MemberService memberService;
 
-    @GetMapping("getMemberIdByToken/{token}")
-    public String getMemberIdByToken(@PathVariable String token){
-        return memberService.getMemberIdByToken(token);
+    @GetMapping("getMemberIdByToken")
+    public String getMemberIdByToken(){
+        return memberService.getMemberIdByToken();
     }
 }

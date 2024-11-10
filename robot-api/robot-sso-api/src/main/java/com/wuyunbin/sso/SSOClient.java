@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 )
 public interface SSOClient {
 
-    @GetMapping("memberApi/getMemberIdByToken/{token}")
-    String getMemberIdByToken(@PathVariable("token") String token);
+    @GetMapping("memberApi/getMemberIdByToken")
+    String getMemberIdByToken();
 
 
 }

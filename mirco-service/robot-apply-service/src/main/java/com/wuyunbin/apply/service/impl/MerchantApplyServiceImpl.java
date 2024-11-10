@@ -32,7 +32,7 @@ public class MerchantApplyServiceImpl extends ServiceImpl<MerchantApplyMapper, M
     public void apply(MerchantApply merchantApply) {
         String token = request.getHeader("Authorization");
         log.info("token:{}", token);
-        String memberId = ssoClient.getMemberIdByToken(token);
+        String memberId = ssoClient.getMemberIdByToken();
         log.info("memberId:{}", memberId);
         merchantApply.setMemberId(memberId);
         this.save(merchantApply);
