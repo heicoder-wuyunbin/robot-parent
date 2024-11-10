@@ -1,5 +1,6 @@
 package com.wuyunbin.apply.service;
 
+import com.wuyunbin.apply.dto.MerchantApplyDTO;
 import com.wuyunbin.apply.entity.MerchantApply;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -14,4 +15,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface MerchantApplyService extends IService<MerchantApply> {
 
     void apply(MerchantApply merchantApply);
+
+    void approval(MerchantApplyDTO merchantApplyDTO);
 }

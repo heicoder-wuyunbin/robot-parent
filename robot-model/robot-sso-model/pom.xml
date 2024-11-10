@@ -3,21 +3,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.wuyunbin</groupId>
-    <artifactId>robot-sso-api</artifactId>
+    <artifactId>robot-sso-model</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>robot-sso-api</name>
-    <description>robot-sso-api</description>
+    <name>robot-sso-model</name>
+    <description>robot-sso-model</description>
     <parent>
         <groupId>com.wuyunbin</groupId>
-        <artifactId>robot-api</artifactId>
+        <artifactId>robot-model</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <dependencies>
-        <dependency>
-            <groupId>com.wuyunbin</groupId>
-            <artifactId>robot-sso-model</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
 
+    </dependencies>
 </project>
