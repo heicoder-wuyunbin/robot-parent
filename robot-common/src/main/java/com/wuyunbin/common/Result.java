@@ -1,5 +1,6 @@
 package com.wuyunbin.common;
 
+import com.wuyunbin.common.exceptions.enums.RespEnum;
 import lombok.Data;
 
 /**
@@ -16,6 +17,14 @@ public class Result<T> {
         Result<T> result = new Result<>();
         result.setErrorCode(-1);
         result.setMessage(message);
+        result.setSuccess(false);
+        return result;
+    }
+
+    public static <T> Result<T> error(RespEnum resp){
+        Result<T> result = new Result<>();
+        result.setErrorCode(resp.getCode());
+        result.setMessage(resp.getMessage());
         result.setSuccess(false);
         return result;
     }
