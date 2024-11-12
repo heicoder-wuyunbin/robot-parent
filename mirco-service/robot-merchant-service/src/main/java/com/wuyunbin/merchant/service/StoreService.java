@@ -13,4 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface StoreService extends IService<Store> {
 
+    void saveStore(Store store);
 }

@@ -71,6 +71,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
     @Override
     public String getMemberIdByToken() {
         String token = request.getHeader("Authorization");
+        log.info("token:{}", token);
         if (token.isBlank()) {
             throw new BusinessException(RespEnum.TOKEN_ERROR);
         }

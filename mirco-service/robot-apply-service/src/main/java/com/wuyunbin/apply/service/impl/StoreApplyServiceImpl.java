@@ -1,9 +1,18 @@
 package com.wuyunbin.apply.service.impl;
 
+import com.wuyunbin.apply.dto.StoreApplyDTO;
 import com.wuyunbin.apply.entity.StoreApply;
 import com.wuyunbin.apply.mapper.StoreApplyMapper;
 import com.wuyunbin.apply.service.StoreApplyService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.wuyunbin.merchant.MerchantClient;
+//import com.wuyunbin.merchant.StoreClient;
+import com.wuyunbin.merchant.entity.Store;
+import com.wuyunbin.sso.SSOClient;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,7 +23,45 @@ import org.springframework.stereotype.Service;
  * @author wuyunbin
  * @since 2024-11-10
  */
+@Slf4j
 @Service
 public class StoreApplyServiceImpl extends ServiceImpl<StoreApplyMapper, StoreApply> implements StoreApplyService {
+    @Resource
+    private HttpServletRequest request;
+    @Resource
+    private SSOClient ssoClient;
 
+    @Resource
+    private MerchantClient merchantClient;
+
+//    @Resource
+//    private StoreClient storeClient;
+    @Override
+    public void apply(StoreApply storeApply) {
+        String token = request.getHeader("Authorization");
+        log.info("token:{}", token);
+        //merchantId和memberId一致
+        String memberId = ssoClient.getMemberIdByToken();
+        log.info("memberId:{}", memberId);
+        storeApply.setMerchantId(memberId);
+        this.save(storeApply);
+    }
+
+    @Override
+    public void approval(StoreApplyDTO storeApplyDTO) {
+        StoreApply storeApply = this.getById(storeApplyDTO.getId());
+        //判断  待审核
+        if(!"0".equals(storeApply.getStatus())){
+            throw new RuntimeException("申请单状态异常");
+        }
+        storeApply.setStatus(storeApplyDTO.getStatus());
+        storeApply.setRemark(storeApplyDTO.getRemark());
+        this.updateById(storeApply);
+
+        //生成对应的店铺信息
+        Store store=new Store();
+        BeanUtils.copyProperties(storeApply,store);
+        store.setId(null);
+        merchantClient.addStore(store);
+    }
 }
