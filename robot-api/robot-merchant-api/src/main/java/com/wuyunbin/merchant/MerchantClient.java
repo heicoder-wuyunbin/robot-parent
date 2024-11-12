@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 )
 public interface MerchantClient {
     @PostMapping("merchantInfoApi")
-    public boolean save(MerchantInfo merchantInfo);
+    public boolean save(@RequestBody MerchantInfo merchantInfo);
 
     @PostMapping("/storeApi/save")
     public boolean addStore(@RequestBody Store store);

@@ -49,6 +49,7 @@ public class StoreApplyServiceImpl extends ServiceImpl<StoreApplyMapper, StoreAp
 
     @Override
     public void approval(StoreApplyDTO storeApplyDTO) {
+        //为什么不能new，要从数据库读？
         StoreApply storeApply = this.getById(storeApplyDTO.getId());
         //判断  待审核
         if(!"0".equals(storeApply.getStatus())){
@@ -61,6 +62,9 @@ public class StoreApplyServiceImpl extends ServiceImpl<StoreApplyMapper, StoreAp
         //生成对应的店铺信息
         Store store=new Store();
         BeanUtils.copyProperties(storeApply,store);
+        //对拷的过程中会把申请单的id拷到店铺id里
+        store.setStoreApplyId(storeApply.getId());
+        store.setStoreName(storeApply.getStoreName());
         store.setId(null);
         merchantClient.addStore(store);
     }

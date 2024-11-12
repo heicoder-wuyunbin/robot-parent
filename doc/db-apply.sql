@@ -35,6 +35,7 @@ CREATE TABLE `store_apply`
 (
     `id`               char(20)     NOT NULL DEFAULT '' COMMENT '商家入驻申请表id',
     `merchant_id`      char(20)     NOT NULL DEFAULT '' COMMENT '商家id',
+    `store_name`       varchar(50)  NOT NULL DEFAULT '' COMMENT '店铺名',
     `contract`         varchar(20)  NOT NULL DEFAULT '' COMMENT '联系人手机',
     `id_card`          char(20)     NOT NULL DEFAULT '' COMMENT '身份证号码',
     `phone`            varchar(18)  NOT NULL DEFAULT '' COMMENT '联系电话',
@@ -58,9 +59,9 @@ CREATE TABLE `store_apply`
     `status`           char(1)      NOT NULL DEFAULT '0' COMMENT '状态 0-待审核 1-通过 2-不通过',
     `remark`           varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
     `recommendation`   varchar(255) NOT NULL DEFAULT '' COMMENT '简介',
-    `created_at`     datetime     NOT NULL DEFAULT current_timestamp COMMENT '创建时间',
-    `updated_at`     datetime              DEFAULT NULL COMMENT '最后更新时间',
-    `deleted_at`     int(1)       NOT NULL DEFAULT 0 COMMENT '删除时间',
+    `created_at`       datetime     NOT NULL DEFAULT current_timestamp COMMENT '创建时间',
+    `updated_at`       datetime              DEFAULT NULL COMMENT '最后更新时间',
+    `deleted_at`       int(1)       NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='店铺入驻申请表';

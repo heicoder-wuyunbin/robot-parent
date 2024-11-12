@@ -36,6 +36,12 @@ public class StoreApply implements Serializable {
     private String contract;
 
     /**
+     * 店铺名
+     */
+
+    private String storeName;
+
+    /**
      * 身份证号码
      */
     private String idCard;

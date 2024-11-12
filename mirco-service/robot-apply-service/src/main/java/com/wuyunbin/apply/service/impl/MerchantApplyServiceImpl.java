@@ -13,6 +13,7 @@ import com.wuyunbin.sso.entity.Merchant;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 /**
@@ -70,6 +71,7 @@ public class MerchantApplyServiceImpl extends ServiceImpl<MerchantApplyMapper, M
         //生成对应的商户信息非登录信息 merchant_info表
         MerchantInfo merchantInfo=new MerchantInfo();
         //todo 对拷
+        BeanUtils.copyProperties(merchantApply,merchantInfo);
         merchantInfo.setId(merchant.getId());
         merchantClient.save(merchantInfo);
     }
