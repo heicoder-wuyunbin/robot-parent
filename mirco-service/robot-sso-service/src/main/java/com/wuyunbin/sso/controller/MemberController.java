@@ -62,4 +62,9 @@ public class MemberController {
         MemberInfo memberInfo =memberService.findByToken();
         return Result.success(memberInfo);
     }
+
+    @GetMapping("test")
+    public Result<Object> test(){
+        return Result.success();
+    }
 }
