@@ -15,8 +15,8 @@ CREATE TABLE `coupon`
     `status`          char(1)        NOT NULL DEFAULT '' COMMENT '状态 0-未使用 1-已使用 2-已过期',
     `validity_start`  datetime       NOT NULL DEFAULT CURRENT_DATE COMMENT '生效时间',
     `validity_end`    datetime       NOT NULL DEFAULT CURRENT_DATE COMMENT '结束时间',
-    `created_at`      datetime                DEFAULT '' COMMENT '创建时间',
-    `updated_at`      datetime                DEFAULT '' COMMENT '最后更新时间',
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
     `deleted_at`      int(1)         NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB

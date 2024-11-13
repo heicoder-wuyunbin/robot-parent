@@ -22,8 +22,8 @@ CREATE TABLE `merchant_apply`
     `status`         char(1)      NOT NULL DEFAULT '0' COMMENT '状态 0-审待审核 1-通过 2-不通过',
     `remark`         varchar(255) NOT NULL DEFAULT '' COMMENT '备注-不通过原因写在这里',
     `recommendation` varchar(255) NOT NULL DEFAULT '' COMMENT '简介',
-    `created_at`     datetime     NOT NULL DEFAULT current_timestamp COMMENT '创建时间',
-    `updated_at`     datetime              DEFAULT NULL COMMENT '最后更新时间',
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
     `deleted_at`     int(1)       NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB

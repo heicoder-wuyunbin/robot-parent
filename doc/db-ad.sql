@@ -14,8 +14,8 @@ CREATE TABLE `ad`
     `area_list`  VARCHAR(255) NOT NULL DEFAULT '' COMMENT '地区,为空时表示全国通用',
     `sort`       INT(2)       NOT NULL DEFAULT 0 COMMENT '权重,值越大越重要越靠前',
     `status`     CHAR(1)      NOT NULL DEFAULT '' COMMENT '0-禁用 1-启用',
-    `created_at` DATETIME              DEFAULT '' COMMENT '创建时间',
-    `updated_at` DATETIME              DEFAULT '' COMMENT '最后更新时间',
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
     `deleted_at` INT(1)       NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
@@ -32,8 +32,8 @@ CREATE TABLE `banner`
     `area_list`  VARCHAR(255) NOT NULL DEFAULT '' COMMENT '地区,为空时表示全国通用',
     `sort`       INT(2)       NOT NULL DEFAULT 0 COMMENT '权重,值越大越重要越靠前',
     `status`     CHAR(1)      NOT NULL DEFAULT '' COMMENT '0-禁用 1-启用',
-    `created_at` DATETIME              DEFAULT '' COMMENT '创建时间',
-    `updated_at` DATETIME              DEFAULT '' COMMENT '最后更新时间',
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
     `deleted_at` INT(1)       NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB

@@ -23,8 +23,8 @@ CREATE TABLE merchant_info
     `status`            char(1)      NOT NULL DEFAULT '0' COMMENT '状态 0-正常 1-禁用',
     `remark`            varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
     `recommendation`    varchar(255) NOT NULL DEFAULT '' COMMENT '简介',
-    `created_at`        datetime     NOT NULL DEFAULT current_timestamp COMMENT '创建时间',
-    `updated_at`        datetime              DEFAULT NULL COMMENT '最后更新时间',
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
     `deleted_at`        int(1)       NOT NULL DEFAULT 0 COMMENT '删除时间',
     primary key (`id`)
 ) COMMENT '商户信息表';
@@ -63,8 +63,8 @@ CREATE TABLE `store`
     `account_type`         varchar(1)   NOT NULL DEFAULT '' COMMENT '账户类型 0-对私 1-对公',
     `status`               char(1)      NOT NULL DEFAULT '0' COMMENT '0-禁用 1-启用',
     `remark`               varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
-    `created_at`           datetime     NULL     DEFAULT NULL COMMENT '创建时间',
-    `updated_at`           datetime              DEFAULT NULL COMMENT '最后更新时间',
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
     `deleted_at`           int(1)       NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
@@ -75,8 +75,8 @@ CREATE TABLE `store_tags`
 (
     `store_id`   char(20) NOT NULL DEFAULT '' COMMENT '店铺id',
     `tag_id`     char(20) NOT NULL DEFAULT '' COMMENT '标签id',
-    `created_at` datetime NULL     DEFAULT NULL COMMENT '创建时间',
-    `updated_at` datetime          DEFAULT NULL COMMENT '最后更新时间',
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
     `deleted_at` int(1)   NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`store_id`, `tag_id`)
 ) ENGINE = InnoDB
@@ -87,8 +87,8 @@ CREATE TABLE `tag`
 (
     `id`         char(20) NOT NULL DEFAULT '' COMMENT '标签id',
     `content`    char(10) NOT NULL DEFAULT '' COMMENT '标签内容',
-    `created_at` datetime NULL     DEFAULT NULL COMMENT '创建时间',
-    `updated_at` datetime          DEFAULT NULL COMMENT '最后更新时间',
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
     `deleted_at` int(1)   NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB

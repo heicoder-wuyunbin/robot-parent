@@ -33,8 +33,8 @@ CREATE TABLE `member_info`
     `hours`            char(2)        NOT NULL DEFAULT '' comment '注册时间的小时数',
     `come_form`        varchar(255)   NOT NULL DEFAULT '' COMMENT '来源',
     `status`           char(1)        NOT NULL DEFAULT '1' COMMENT '状态 0-禁用 1-启用',
-    `created_at`       datetime                DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_at`       datetime       NULL     DEFAULT NULL COMMENT '最后更新时间',
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
     `deleted_at`       int(1)         NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
