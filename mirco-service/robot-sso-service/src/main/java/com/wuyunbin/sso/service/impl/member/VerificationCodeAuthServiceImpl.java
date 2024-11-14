@@ -45,16 +45,34 @@ public class VerificationCodeAuthServiceImpl implements MemberAuthService {
         Random random = new Random();
         String code = random.nextInt(8888) + 1000 + "";
 
-        /*
-        todo 缓存验证码
-        redis编排方式： 项目名:模块名:场景名:特征码
-         */
+
+        //redis编排方式： 项目名:模块名:场景名:特征码
+
         //判断手机号格式
         if(phone.length()!=11){
             throw new BusinessException(RespEnum.INVALID_PHONE);
         }
-        String key = "robot:sso:login:" + phone;
+        String key = "robot:sso:login:" + phone+":code";
+        String count="robot:sso:login:"+phone+":count";
+        //判断是否超过5次
+        if(Boolean.TRUE.equals(redisTemplate.hasKey(count))){
+            String s = redisTemplate.opsForValue().get(count);
+            if(s==null){
+                throw new BusinessException(RespEnum.ERROR);
+            }
+            if(Integer.parseInt(s)>5){
+                throw new BusinessException(RespEnum.TOO_MANY_REQUESTS);
+            }
+        }
+
         redisTemplate.opsForValue().set(key, code, 360, TimeUnit.SECONDS);
+        //记一次发送次数
+        if(Boolean.FALSE.equals(redisTemplate.hasKey(count))){
+            redisTemplate.opsForValue().set(count,"1",5,TimeUnit.MINUTES);
+        }else{
+            int countInt = Integer.parseInt(redisTemplate.opsForValue().get(count))+1;
+            redisTemplate.opsForValue().set(count,countInt+"",5,TimeUnit.MINUTES);
+        }
         //往MQ中发送短信
         rabbitTemplate.convertAndSend("test.direct","sms","您的登录短信验证码："+code);
         log.info("验证码是：{}", code);

@@ -10,6 +10,8 @@ import lombok.Getter;
 public enum RespEnum {
     SUCCESS(20000, "success"),
     ERROR(-1, "失败"),
+    INVALID_PARAMETERS(30001, "参数错误"),
+    TOO_MANY_REQUESTS(30002, "请求过多"),
     TOKEN_ERROR(40001, "token错误"),
     TOKEN_EXPIRED(40002, "token过期"),
     TOKEN_SIGNATURE_INVALID(40003, "token签名无效"),

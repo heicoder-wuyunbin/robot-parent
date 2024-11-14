@@ -15,13 +15,13 @@ public class BaseExceptionHandler {
 
     @ExceptionHandler
     public Result<Object> handleException(BusinessException e) {
-        //log.error("系统异常", e);
+        log.error("系统异常", e);
         return Result.error(e.getResp());
     }
 
     @ExceptionHandler
     public Result<Object> handleException(Exception e) {
-        //log.error("系统异常", e);
+        log.error("系统异常", e);
         return Result.error(e.getMessage());
     }
 }

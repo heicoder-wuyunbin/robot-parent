@@ -42,7 +42,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
     @Override
     public MemberInfo findByToken() {
         String token = request.getHeader("Authorization");
-        if (token.isBlank()) {
+        if (token==null||token.isBlank()) {
             throw new BusinessException(RespEnum.TOKEN_MISSING);
         }
         token = token.replace("Bearer ", "");
