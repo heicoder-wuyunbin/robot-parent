@@ -1,6 +1,8 @@
 package com.wuyunbin.sso.service.impl.member;
 
 import com.alibaba.fastjson2.JSON;
+import com.wuyunbin.common.exceptions.BusinessException;
+import com.wuyunbin.common.exceptions.enums.RespEnum;
 import com.wuyunbin.member.api.MemberInfoClient;
 import com.wuyunbin.member.entity.MemberInfo;
 import com.wuyunbin.sso.dto.LoginDTO;
@@ -47,6 +49,10 @@ public class VerificationCodeAuthServiceImpl implements MemberAuthService {
         todo 缓存验证码
         redis编排方式： 项目名:模块名:场景名:特征码
          */
+        //判断手机号格式
+        if(phone.length()!=11){
+            throw new BusinessException(RespEnum.INVALID_PHONE);
+        }
         String key = "robot:sso:login:" + phone;
         redisTemplate.opsForValue().set(key, code, 360, TimeUnit.SECONDS);
         //往MQ中发送短信

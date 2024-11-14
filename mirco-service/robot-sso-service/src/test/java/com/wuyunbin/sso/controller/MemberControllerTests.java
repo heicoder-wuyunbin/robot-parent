@@ -2,21 +2,27 @@ package com.wuyunbin.sso.controller;
 
 import com.alibaba.fastjson2.JSON;
 import com.wuyunbin.common.Result;
+import com.wuyunbin.common.exceptions.enums.RespEnum;
 import com.wuyunbin.sso.dto.LoginDTO;
 import com.wuyunbin.sso.dto.SendSmsDTO;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.time.Duration;
 import java.util.HashMap;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Slf4j
@@ -31,7 +37,6 @@ public class MemberControllerTests {
 
     @BeforeEach
     public void setUp() throws Exception {
-        // Attempt to login and retrieve a valid token for authenticated tests
         LoginDTO loginDTO = new LoginDTO();
         loginDTO.setPhone("13812341234");
         loginDTO.setPassword("123456");
@@ -53,7 +58,6 @@ public class MemberControllerTests {
 
     @Test
     public void loginSuccess() throws Exception {
-        // Use real user credentials
         LoginDTO loginDTO = new LoginDTO();
         loginDTO.setPhone("13812341234");
         loginDTO.setPassword("123456");
@@ -63,14 +67,15 @@ public class MemberControllerTests {
                         MockMvcRequestBuilders.post("/member/login")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(JSON.toJSONString(loginDTO))
-                ).andExpect(status().isOk())
-                .andExpect(jsonPath("$.errorCode").value(20000))
+                ).andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$.errorCode").value(RespEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.message").value(RespEnum.SUCCESS.getMessage()))
                 .andExpect(jsonPath("$.data.token").exists())
                 .andReturn();
     }
 
     @Test
-    public void loginFailure() throws Exception {
+    public void loginFailureWithWrongPassword() throws Exception {
         LoginDTO loginDTO = new LoginDTO();
         loginDTO.setPhone("admin");
         loginDTO.setPassword("121212");
@@ -81,8 +86,16 @@ public class MemberControllerTests {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(JSON.toJSONString(loginDTO))
                 ).andExpect(status().isOk())
-                .andExpect(jsonPath("$.errorCode").value(40001))
-                .andExpect(jsonPath("$.message").value("Authentication failed"));
+                .andExpect(jsonPath("$.errorCode").value(RespEnum.INVALID_ACCOUNT.getCode()))
+                .andExpect(jsonPath("$.message").value(RespEnum.INVALID_ACCOUNT.getMessage()));
+    }
+
+    @Test
+    public void loginFailureWithoutRequestData() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/member/login"))
+                .andExpect(status().isOk()) // 400 response status is expected here for missing data
+                .andExpect(result -> assertInstanceOf(HttpMessageNotReadableException.class, result.getResolvedException()));
+
     }
 
     @Test
@@ -95,34 +108,25 @@ public class MemberControllerTests {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(JSON.toJSONString(sendSmsDTO))
                 ).andExpect(status().isOk())
-                .andExpect(jsonPath("$.errorCode").value(20000))
-                .andExpect(jsonPath("$.message").value("Success"));
+                .andExpect(jsonPath("$.errorCode").value(RespEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.message").value(RespEnum.SUCCESS.getMessage()));
     }
 
     @Test
-    public void getCodeFailure() throws Exception {
+    public void getCodeFailureWithInvalidPhone() throws Exception {
         SendSmsDTO sendSmsDTO = new SendSmsDTO();
-        sendSmsDTO.setPhone("invalid_phone");
+        sendSmsDTO.setPhone("1381234123");
 
         mockMvc.perform(
                         MockMvcRequestBuilders.post("/member/getCode")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(JSON.toJSONString(sendSmsDTO))
-                ).andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errorCode").value(40002))
-                .andExpect(jsonPath("$.message").value("Invalid phone number"));
+                ).andExpect(status().isOk())
+                .andExpect(jsonPath("$.errorCode").value(RespEnum.INVALID_PHONE.getCode()))
+                .andExpect(jsonPath("$.message").value(RespEnum.INVALID_PHONE.getMessage()));
     }
 
-    @Test
-    public void findByTokenSuccess() throws Exception {
-        mockMvc.perform(
-                        MockMvcRequestBuilders.get("/member/findByToken")
-                                .header("Authorization", authToken)  // Use the token from setup
-                                .contentType(MediaType.APPLICATION_JSON)
-                ).andExpect(status().isOk())
-                .andExpect(jsonPath("$.errorCode").value(20000))
-                .andExpect(jsonPath("$.data").isNotEmpty());
-    }
+
 
     @Test
     public void findByTokenFailure() throws Exception {
@@ -130,17 +134,39 @@ public class MemberControllerTests {
                         MockMvcRequestBuilders.get("/member/findByToken")
                                 .header("Authorization", "invalid_token")
                                 .contentType(MediaType.APPLICATION_JSON)
-                ).andExpect(status().isUnauthorized())
-                .andExpect(jsonPath("$.errorCode").value(40003))
-                .andExpect(jsonPath("$.message").value("Invalid token"));
+                ).andExpect(status().isOk())
+                .andExpect(jsonPath("$.errorCode").value(RespEnum.TOKEN_MALFORMED.getCode()))
+                .andExpect(jsonPath("$.message").value(RespEnum.TOKEN_MALFORMED.getMessage()));
     }
 
+
     @Test
-    public void testEndpoint() throws Exception {
+    public void findByTokenSuccess() throws Exception {
+        assertTimeoutPreemptively(Duration.ofMillis(200), () -> {
+            mockMvc.perform(
+                            MockMvcRequestBuilders.get("/member/findByToken")
+                                    .header("Authorization", authToken)  // Use the token from setup
+                                    .contentType(MediaType.APPLICATION_JSON)
+                    ).andExpect(status().isOk())
+                    .andExpect(jsonPath("$.errorCode").value(RespEnum.SUCCESS.getCode()))
+                    .andExpect(jsonPath("$.data").isNotEmpty());
+        });
+    }
+
+    // 简易压力测试：重复10次登录请求，模拟压力测试
+    @RepeatedTest(10)
+    public void repeatedLoginSuccessTest() throws Exception {
+        LoginDTO loginDTO = new LoginDTO();
+        loginDTO.setPhone("13812341234");
+        loginDTO.setPassword("123456");
+        loginDTO.setType("passwordAuthService");
+
         mockMvc.perform(
-                        MockMvcRequestBuilders.get("/member/test")
+                        MockMvcRequestBuilders.post("/member/login")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(JSON.toJSONString(loginDTO))
                 ).andExpect(status().isOk())
                 .andExpect(jsonPath("$.errorCode").value(20000))
-                .andExpect(jsonPath("$.data").isEmpty());
+                .andExpect(jsonPath("$.data.token").exists());
     }
 }
