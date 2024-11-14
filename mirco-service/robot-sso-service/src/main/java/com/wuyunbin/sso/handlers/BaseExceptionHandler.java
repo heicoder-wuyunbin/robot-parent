@@ -18,4 +18,10 @@ public class BaseExceptionHandler {
         log.error("系统异常", e);
         return Result.error(e.getResp());
     }
+
+    @ExceptionHandler
+    public Result<Object> handleException(Exception e) {
+        log.error("系统异常", e);
+        return Result.error(e.getMessage());
+    }
 }

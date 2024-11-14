@@ -6,6 +6,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
+/**
+ * @author wuyunbin
+ */
 @EnableFeignClients(clients = {SSOClient.class, MerchantClient.class})
 @SpringBootApplication
 public class RobotApplyServiceApplication {
