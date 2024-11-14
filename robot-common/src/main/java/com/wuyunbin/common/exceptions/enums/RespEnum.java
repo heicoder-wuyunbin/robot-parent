@@ -10,7 +10,8 @@ public enum RespEnum {
     TOKEN_EXPIRED(40002, "token过期"),
     TOKEN_SIGNATURE_INVALID(40003, "token签名无效"),
     TOKEN_MALFORMED(40004, "token格式错误"),
-    TOKEN_MISSING(40005, "token丢失");
+    TOKEN_MISSING(40005, "token丢失"),
+    INVALID_ACCOUNT(40006, "非法的账号信息");
 
     private Integer code;
     private String message;

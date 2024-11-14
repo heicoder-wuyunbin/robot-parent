@@ -1,5 +1,7 @@
 package com.wuyunbin.sso.service.impl.member;
 
+import com.wuyunbin.common.exceptions.BusinessException;
+import com.wuyunbin.common.exceptions.enums.RespEnum;
 import com.wuyunbin.sso.dto.LoginDTO;
 import com.wuyunbin.sso.entity.Member;
 import com.wuyunbin.sso.service.MemberAuthService;
@@ -36,11 +38,11 @@ public class PasswordAuthServiceImpl implements MemberAuthService {
                 .eq(Member::getPhone, loginDTO.getPhone())
                 .one();
         if (member == null) {
-            throw new RuntimeException("未注册的用户或者密码不正确");
+            throw new BusinessException(RespEnum.INVALID_ACCOUNT);
         }
 
         if (!member.getPassword().equals(loginDTO.getPassword())) {
-            throw new RuntimeException("未注册的用户或者密码不正确");
+            throw new BusinessException(RespEnum.INVALID_ACCOUNT);
         }
         HashMap<String,Object> map=new HashMap<>();
         map.put("id",member.getId());
