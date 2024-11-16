@@ -4,10 +4,11 @@ import com.wuyunbin.common.Result;
 import com.wuyunbin.member.entity.MemberInfo;
 import com.wuyunbin.sso.dto.LoginDTO;
 import com.wuyunbin.sso.dto.SendSmsDTO;
-import com.wuyunbin.sso.entity.Member;
 import com.wuyunbin.sso.enums.AuthType;
 import com.wuyunbin.sso.service.MemberAuthService;
 import com.wuyunbin.sso.service.MemberService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,7 @@ import java.util.Map;
  * @author wuyunbin
  * @since 2024-10-27
  */
+@Tag(name = "会员管理")
 @Slf4j
 @RestController
 @RequestMapping("/member")
@@ -36,6 +38,7 @@ public class MemberController {
         this.memberAuthServiceHashMap =memberAuthServiceHashMap;
     }
 
+    @Operation(summary = "会员登录")
     @PostMapping("login")
     public Result<HashMap<String, Object>> login(@RequestBody LoginDTO loginDTO) {
         log.info("loginDTO:{}", loginDTO);
@@ -48,6 +51,7 @@ public class MemberController {
         return Result.success(map);
     }
 
+    @Operation(summary = "获取验证码")
     @PostMapping("getCode")
     public Result<Object> getCode(@RequestBody SendSmsDTO sendSmsDTO){
 
@@ -57,14 +61,17 @@ public class MemberController {
         return Result.success();
     }
 
+    @Operation(summary = "根据token获取会员信息")
     @GetMapping("findByToken")
     public Result<MemberInfo> findByToken(){
         MemberInfo memberInfo =memberService.findByToken();
         return Result.success(memberInfo);
     }
 
-    @GetMapping("test")
-    public Result<Object> test(){
-        return Result.success();
+    @Operation(summary = "根据token获取会员id")
+    @GetMapping("getMemberIdByToken")
+    public Result<String> getMemberIdByToken(){
+        log.info("1");
+        return Result.success(memberService.getMemberIdByToken()) ;
     }
 }

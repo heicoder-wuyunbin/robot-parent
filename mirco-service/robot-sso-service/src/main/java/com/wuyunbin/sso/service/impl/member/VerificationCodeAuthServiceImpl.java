@@ -86,7 +86,7 @@ public class VerificationCodeAuthServiceImpl implements MemberAuthService {
                 .one();
 
         //redis取值对比
-        String key = "robot:sso:login:" + loginDTO.getPhone();
+        String key = "robot:sso:login:" + loginDTO.getPhone()+":code";
         String codeInRedis = redisTemplate.opsForValue().get(key);
         if(codeInRedis==null){
             throw new RuntimeException("短信验证码丢失或者失效");

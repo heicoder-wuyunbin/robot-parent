@@ -17,4 +17,5 @@ public class RobotApplyServiceApplication {
         SpringApplication.run(RobotApplyServiceApplication.class, args);
     }
 
+
 }

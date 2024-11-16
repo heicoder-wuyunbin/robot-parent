@@ -1,6 +1,9 @@
 package com.wuyunbin.apply.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.databind.util.BeanUtil;
+import com.wuyunbin.apply.dto.ApplyPageQueryDTO;
 import com.wuyunbin.apply.dto.MerchantApplyDTO;
 import com.wuyunbin.apply.entity.MerchantApply;
 import com.wuyunbin.apply.mapper.MerchantApplyMapper;
@@ -74,5 +77,12 @@ public class MerchantApplyServiceImpl extends ServiceImpl<MerchantApplyMapper, M
         BeanUtils.copyProperties(merchantApply,merchantInfo);
         merchantInfo.setId(merchant.getId());
         merchantClient.save(merchantInfo);
+    }
+
+    @Override
+    public IPage<MerchantApply> getPage(ApplyPageQueryDTO applyPageQueryDTO) {
+        IPage<MerchantApply> pageInfo=new Page<>(applyPageQueryDTO.getCurrent(), applyPageQueryDTO.getPageSize());
+        IPage<MerchantApply> page = this.page(pageInfo);
+        return page;
     }
 }

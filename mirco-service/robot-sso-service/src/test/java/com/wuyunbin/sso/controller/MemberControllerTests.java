@@ -126,8 +126,6 @@ public class MemberControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(RespEnum.INVALID_PHONE.getMessage()));
     }
 
-
-
     @Test
     public void findByTokenFailure() throws Exception {
         mockMvc.perform(
