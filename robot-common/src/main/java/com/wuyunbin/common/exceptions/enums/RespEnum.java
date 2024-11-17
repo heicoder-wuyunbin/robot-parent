@@ -18,7 +18,8 @@ public enum RespEnum {
     TOKEN_MALFORMED(40004, "token格式错误"),
     TOKEN_MISSING(40005, "token丢失"),
     INVALID_ACCOUNT(40006, "非法的账号信息"),
-    INVALID_PHONE(40007, "非法的手机号");
+    INVALID_PHONE(40007, "非法的手机号"),
+    LOGIN_TYPE_NOT_SUPPORTED(40008, "不支持的登录类型"),;
 
 
     private Integer code;

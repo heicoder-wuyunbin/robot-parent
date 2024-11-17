@@ -7,10 +7,7 @@ import com.wuyunbin.sso.dto.LoginDTO;
 import com.wuyunbin.sso.dto.SendSmsDTO;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -36,7 +33,14 @@ public class MemberControllerTests {
     private String authToken;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp(TestInfo testInfo) throws Exception {
+
+        if (testInfo.getTestMethod().isPresent() &&
+            testInfo.getTestMethod().get().getName().equals("loginSuccess")) {
+            // Skip setUp for loginSuccess
+            return;
+        }
+
         LoginDTO loginDTO = new LoginDTO();
         loginDTO.setPhone("13812341234");
         loginDTO.setPassword("123456");
@@ -55,6 +59,8 @@ public class MemberControllerTests {
         this.authToken = result.getData().get("token");  // Store token for later use
         log.info("Retrieved auth token: {}", authToken);
     }
+
+
 
     @Test
     public void loginSuccess() throws Exception {
