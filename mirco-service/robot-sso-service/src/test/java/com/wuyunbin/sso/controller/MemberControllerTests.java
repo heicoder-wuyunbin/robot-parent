@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.Duration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.stream.IntStream;
 
 
@@ -35,8 +36,10 @@ public class MemberControllerTests {
     @BeforeEach
     public void setUp(TestInfo testInfo) throws Exception {
 
+        List<String> whitList = List.of("loginSuccess", "loginFailureWithWrongPassword");
+
         if (testInfo.getTestMethod().isPresent() &&
-            testInfo.getTestMethod().get().getName().equals("loginSuccess")) {
+           whitList.contains(testInfo.getTestMethod().get().getName())  ) {
             // Skip setUp for loginSuccess
             return;
         }
@@ -60,7 +63,10 @@ public class MemberControllerTests {
         log.info("Retrieved auth token: {}", authToken);
     }
 
-
+    @AfterEach
+    public void tearDown() {
+       log.info("测试完之后做清理或者善后工作的...");
+    }
 
     @Test
     public void loginSuccess() throws Exception {
