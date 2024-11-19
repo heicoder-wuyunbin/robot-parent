@@ -26,7 +26,12 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class MerchantApplyControllerTest {
     @Resource
     private MockMvc mockMvc;
+
+    @Resource
+    private RestTemplate restTemplate;
+
     private String authToken;
+
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -35,14 +40,13 @@ public class MerchantApplyControllerTest {
         loginDTO.setPassword("123456");
         loginDTO.setType("passwordAuthService");
 
-        RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<LoginDTO> entity = new HttpEntity<>(loginDTO, headers);
 
         log.info("Sending request to: http://robot-sso-service/member/login");
         log.info("Request body: {}", JSON.toJSONString(loginDTO));
-        ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:8082/member/login", entity, String.class);
+        ResponseEntity<String> response = restTemplate.postForEntity("http://robot-sso-service/member/login", entity, String.class);
         log.info("Received response: {}", response.getBody());
 
 
