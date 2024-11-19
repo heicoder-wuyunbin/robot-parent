@@ -13,6 +13,7 @@ import io.jsonwebtoken.Claims;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 /**
@@ -72,8 +73,9 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
     public String getMemberIdByToken() {
         String token = request.getHeader("Authorization");
         log.info("token:{}", token);
-        if (token.isBlank()) {
-            throw new BusinessException(RespEnum.TOKEN_ERROR);
+
+        if(StringUtils.isBlank(token)){
+            throw new BusinessException(RespEnum.TOKEN_MISSING);
         }
         token = token.replace("Bearer ", "");
         String valid = jwtUtil.validateToken(token);
