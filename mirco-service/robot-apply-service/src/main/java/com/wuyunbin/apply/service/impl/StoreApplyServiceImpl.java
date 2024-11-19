@@ -1,5 +1,8 @@
 package com.wuyunbin.apply.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.wuyunbin.apply.dto.ApplyPageQueryDTO;
 import com.wuyunbin.apply.dto.StoreApplyDTO;
 import com.wuyunbin.apply.entity.StoreApply;
 import com.wuyunbin.apply.mapper.StoreApplyMapper;
@@ -34,7 +37,7 @@ public class StoreApplyServiceImpl extends ServiceImpl<StoreApplyMapper, StoreAp
     @Resource
     private MerchantClient merchantClient;
 
-//    @Resource
+    //    @Resource
 //    private StoreClient storeClient;
     @Override
     public void apply(StoreApply storeApply) {
@@ -52,7 +55,7 @@ public class StoreApplyServiceImpl extends ServiceImpl<StoreApplyMapper, StoreAp
         //为什么不能new，要从数据库读？
         StoreApply storeApply = this.getById(storeApplyDTO.getId());
         //判断  待审核
-        if(!"0".equals(storeApply.getStatus())){
+        if (!"0".equals(storeApply.getStatus())) {
             throw new RuntimeException("申请单状态异常");
         }
         storeApply.setStatus(storeApplyDTO.getStatus());
@@ -60,12 +63,19 @@ public class StoreApplyServiceImpl extends ServiceImpl<StoreApplyMapper, StoreAp
         this.updateById(storeApply);
 
         //生成对应的店铺信息
-        Store store=new Store();
-        BeanUtils.copyProperties(storeApply,store);
+        Store store = new Store();
+        BeanUtils.copyProperties(storeApply, store);
         //对拷的过程中会把申请单的id拷到店铺id里
         store.setStoreApplyId(storeApply.getId());
         store.setStoreName(storeApply.getStoreName());
         store.setId(null);
         merchantClient.addStore(store);
+    }
+
+    @Override
+    public IPage<StoreApply> getPage(ApplyPageQueryDTO applyPageQueryDTO) {
+        IPage<StoreApply> pageInfo = new Page<>(applyPageQueryDTO.getCurrent(), applyPageQueryDTO.getPageSize());
+        IPage<StoreApply> page = this.page(pageInfo);
+        return page;
     }
 }

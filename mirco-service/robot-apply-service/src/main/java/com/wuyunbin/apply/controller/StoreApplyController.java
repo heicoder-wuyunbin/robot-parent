@@ -1,5 +1,7 @@
 package com.wuyunbin.apply.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.wuyunbin.apply.dto.ApplyPageQueryDTO;
 import com.wuyunbin.apply.dto.StoreApplyDTO;
 import com.wuyunbin.apply.entity.StoreApply;
 import com.wuyunbin.apply.service.StoreApplyService;
@@ -38,6 +40,13 @@ public class StoreApplyController {
     public Result<Object> approval(@RequestBody StoreApplyDTO storeApplyDTO){
         storeApplyService.approval(storeApplyDTO);
         return Result.success();
+    }
+
+    @Operation(summary = "分页查询店铺入驻申请", description = "分页查询店铺入驻申请")
+    @PostMapping("page")
+    public Result<Object> getPage(@RequestBody ApplyPageQueryDTO applyPageQueryDTO){
+        IPage<StoreApply> page= storeApplyService.getPage(applyPageQueryDTO);
+        return Result.success(page);
     }
 
 }

@@ -1,5 +1,7 @@
 package com.wuyunbin.apply.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.wuyunbin.apply.dto.ApplyPageQueryDTO;
 import com.wuyunbin.apply.dto.StoreApplyDTO;
 import com.wuyunbin.apply.entity.StoreApply;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -17,4 +19,6 @@ public interface StoreApplyService extends IService<StoreApply> {
     void apply(StoreApply storeApply);
 
     void approval(StoreApplyDTO storeApplyDTO);
+
+    IPage<StoreApply> getPage(ApplyPageQueryDTO applyPageQueryDTO);
 }
