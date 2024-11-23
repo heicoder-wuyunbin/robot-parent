@@ -30,7 +30,10 @@ class RobotMerchantServiceApplicationTests {
         GeoResults<RedisGeoCommands.GeoLocation<String>> results=redisTemplate.opsForGeo().radius("stories",circle,args);
 
         for (GeoResult<RedisGeoCommands.GeoLocation<String>> result : results) {
-            System.out.println(result);
+            RedisGeoCommands.GeoLocation<String> location = result.getContent();
+            String name = location.getName();
+            Distance distance = result.getDistance();
+            System.out.println("Name: " + name + ", Distance: " + distance);
         }
     }
 

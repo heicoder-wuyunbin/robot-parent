@@ -1,5 +1,7 @@
 package com.wuyunbin.merchant.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.wuyunbin.merchant.dto.StorePageQueryDTO;
 import com.wuyunbin.merchant.entity.Store;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -14,4 +16,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface StoreService extends IService<Store> {
 
     void saveStore(Store store);
+
+    IPage<Store> getPage(StorePageQueryDTO storePageQueryDTO);
+
+    IPage<Store> getNearbyPage(StorePageQueryDTO storePageQueryDTO);
 }

@@ -7,6 +7,7 @@ import com.wuyunbin.apply.entity.MerchantApply;
 import com.wuyunbin.apply.service.MerchantApplyService;
 import com.wuyunbin.common.Result;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 2024-11-10
  */
 @Slf4j
+@Tag(name = "商家入驻申请表")
 @RestController
 @RequestMapping("/merchantApply")
 public class MerchantApplyController {

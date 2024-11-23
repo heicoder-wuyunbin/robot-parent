@@ -63,12 +63,12 @@ public class Store implements Serializable {
     /**
      * 经度
      */
-    private String longitude;
+    private Double longitude;
 
     /**
      * 纬度
      */
-    private String latitude;
+    private Double latitude;
 
     /**
      * 行业id
@@ -85,10 +85,7 @@ public class Store implements Serializable {
      */
     private String province;
 
-    /**
-     * 省份id
-     */
-    private String provinceId;
+
 
     /**
      * 城市
@@ -96,19 +93,9 @@ public class Store implements Serializable {
     private String city;
 
     /**
-     * 城市id
-     */
-    private String cityId;
-
-    /**
      * 区县
      */
     private String area;
-
-    /**
-     * 区县id
-     */
-    private String areaId;
 
     /**
      * 详细地址

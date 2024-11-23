@@ -61,29 +61,15 @@ public class MerchantInfo implements Serializable {
     private String province;
 
     /**
-     * 省份id
-     */
-    private String provinceId;
-
-    /**
      * 城市
      */
     private String city;
-
-    /**
-     * 城市id
-     */
-    private String cityId;
 
     /**
      * 区县
      */
     private String area;
 
-    /**
-     * 区县id
-     */
-    private String areaId;
 
     /**
      * 详细地址

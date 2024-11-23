@@ -1,5 +1,6 @@
 package com.wuyunbin.apply.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.databind.util.BeanUtil;
@@ -42,11 +43,13 @@ public class MerchantApplyServiceImpl extends ServiceImpl<MerchantApplyMapper, M
 
     @Override
     public void apply(MerchantApply merchantApply) {
+        //todo 需要对前端传入的数据进行校验
         String token = request.getHeader("Authorization");
         log.info("token:{}", token);
         String memberId = ssoClient.getMemberIdByToken();
         log.info("memberId:{}", memberId);
         merchantApply.setMemberId(memberId);
+
         this.save(merchantApply);
     }
 
@@ -82,7 +85,12 @@ public class MerchantApplyServiceImpl extends ServiceImpl<MerchantApplyMapper, M
     @Override
     public IPage<MerchantApply> getPage(ApplyPageQueryDTO applyPageQueryDTO) {
         IPage<MerchantApply> pageInfo=new Page<>(applyPageQueryDTO.getCurrent(), applyPageQueryDTO.getPageSize());
-        IPage<MerchantApply> page = this.page(pageInfo);
+        LambdaQueryWrapper<MerchantApply> wrapper=new LambdaQueryWrapper<>();
+        String token = request.getHeader("Authorization");
+        log.info("token:{}", token);
+        String memberId = ssoClient.getMemberIdByToken();
+        wrapper.eq(MerchantApply::getMemberId,memberId);
+        IPage<MerchantApply> page = this.page(pageInfo,wrapper);
         return page;
     }
 }

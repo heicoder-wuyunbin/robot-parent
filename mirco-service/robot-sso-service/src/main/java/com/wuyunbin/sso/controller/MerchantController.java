@@ -5,6 +5,7 @@ import com.wuyunbin.sso.entity.Merchant;
 import com.wuyunbin.sso.service.MerchantService;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,7 +24,7 @@ public class MerchantController {
     private MerchantService merchantService;
 
     @PostMapping("")
-    public Result<Object> save(Merchant merchant){
+    public Result<Object> save(@RequestBody Merchant merchant){
         this.merchantService.save(merchant);
         return Result.success();
     }

@@ -1,5 +1,6 @@
 package com.wuyunbin.apply.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wuyunbin.apply.dto.ApplyPageQueryDTO;
@@ -75,7 +76,12 @@ public class StoreApplyServiceImpl extends ServiceImpl<StoreApplyMapper, StoreAp
     @Override
     public IPage<StoreApply> getPage(ApplyPageQueryDTO applyPageQueryDTO) {
         IPage<StoreApply> pageInfo = new Page<>(applyPageQueryDTO.getCurrent(), applyPageQueryDTO.getPageSize());
-        IPage<StoreApply> page = this.page(pageInfo);
+         LambdaQueryWrapper<StoreApply> wrapper=new LambdaQueryWrapper<>();
+        String token = request.getHeader("Authorization");
+        log.info("token:{}", token);
+        String memberId = ssoClient.getMemberIdByToken();
+        wrapper.eq(StoreApply::getMerchantId,memberId);
+        IPage<StoreApply> page = this.page(pageInfo,wrapper);
         return page;
     }
 }
