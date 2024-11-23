@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wuyunbin.merchant.dto.StorePageQueryDTO;
 import com.wuyunbin.merchant.entity.Store;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.wuyunbin.merchant.vo.StorePageVO;
 
 /**
  * <p>
@@ -19,5 +20,5 @@ public interface StoreService extends IService<Store> {
 
     IPage<Store> getPage(StorePageQueryDTO storePageQueryDTO);
 
-    IPage<Store> getNearbyPage(StorePageQueryDTO storePageQueryDTO);
+    IPage<StorePageVO> getNearbyPage(StorePageQueryDTO storePageQueryDTO);
 }

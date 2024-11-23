@@ -4,12 +4,15 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.TypeReference;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.wuyunbin.merchant.dto.StorePageQueryDTO;
 import com.wuyunbin.merchant.entity.Store;
 import com.wuyunbin.merchant.mapper.StoreMapper;
 import com.wuyunbin.merchant.service.StoreService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.wuyunbin.merchant.vo.StorePageVO;
 import jakarta.annotation.Resource;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.geo.*;
 import org.springframework.data.redis.connection.RedisGeoCommands;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -37,12 +40,9 @@ public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements
     public void saveStore(Store store) {
         this.save(store);
         //加入到redis的list中
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("name", store.getStoreName());
-        map.put("id", store.getId());
-        map.put("cover_image", store.getCoverImage());
-        map.put("score", store.getScore());
-        redisTemplate.opsForGeo().add("stories", new Point(store.getLongitude(), store.getLatitude()), JSON.toJSONString(map));
+        StorePageVO storePageVO = new StorePageVO();
+        BeanUtils.copyProperties(store, storePageVO);
+        redisTemplate.opsForGeo().add("stories", new Point(store.getLongitude(), store.getLatitude()), JSON.toJSONString(storePageVO));
     }
 
     @Override
@@ -53,8 +53,8 @@ public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements
     }
 
     @Override
-    public IPage<Store> getNearbyPage(StorePageQueryDTO storePageQueryDTO) {
-        IPage<Store> pageInfo = new Page<>(storePageQueryDTO.getCurrent(), storePageQueryDTO.getPageSize());
+    public IPage<StorePageVO> getNearbyPage(StorePageQueryDTO storePageQueryDTO) {
+        IPage<StorePageVO> pageInfo = new Page<>(storePageQueryDTO.getCurrent(), storePageQueryDTO.getPageSize());
         Circle circle = new Circle(
                 new Point(storePageQueryDTO.getLongitude(), storePageQueryDTO.getLatitude()),
                 new Distance(storePageQueryDTO.getDistance(), Metrics.KILOMETERS)
@@ -65,18 +65,18 @@ public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements
         GeoResults<RedisGeoCommands.GeoLocation<String>> results = redisTemplate.opsForGeo().radius("stories", circle, args);
 
         if (results == null) {
-            pageInfo = this.page(pageInfo);
+            //todo 附近没有门店的处理方案
         }
 
-        List<Store> storeList = new ArrayList<>();
+        List<StorePageVO> storeList = new ArrayList<>();
         for (GeoResult<RedisGeoCommands.GeoLocation<String>> result : results) {
             RedisGeoCommands.GeoLocation<String> location = result.getContent();
             String name = location.getName();
-            Store store = JSON.parseObject(name, Store.class);
-            storeList.add(store);
-            pageInfo.setRecords(storeList);
-
+            StorePageVO storePageVO = JSON.parseObject(name, StorePageVO.class);
+            storePageVO.setDistance(result.getDistance().getValue());
+            storeList.add(storePageVO);
         }
+        pageInfo.setRecords(storeList);
         return pageInfo;
     }
 }

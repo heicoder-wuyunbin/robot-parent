@@ -5,6 +5,7 @@ import com.wuyunbin.common.Result;
 import com.wuyunbin.merchant.dto.StorePageQueryDTO;
 import com.wuyunbin.merchant.entity.Store;
 import com.wuyunbin.merchant.service.StoreService;
+import com.wuyunbin.merchant.vo.StorePageVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -41,8 +42,8 @@ public class StoreController {
     //附近的店铺分页显示
     @Operation(summary = "分页查询附近店铺", description = "根据条件分页查询附近店铺，主要提供给小程序端")
     @PostMapping("nearbyPage")
-    public Result<IPage<Store>> getNearbyPage(@RequestBody StorePageQueryDTO storePageQueryDTO){
-        IPage<Store> page= storeService.getNearbyPage(storePageQueryDTO);
+    public Result<IPage<StorePageVO>> getNearbyPage(@RequestBody StorePageQueryDTO storePageQueryDTO){
+        IPage<StorePageVO> page= storeService.getNearbyPage(storePageQueryDTO);
         return Result.success(page);
     }
 }
