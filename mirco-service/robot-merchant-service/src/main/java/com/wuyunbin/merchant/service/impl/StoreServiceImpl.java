@@ -54,7 +54,9 @@ public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements
 
     @Override
     public IPage<StorePageVO> getNearbyPage(StorePageQueryDTO storePageQueryDTO) {
+        //构建一个page，用在做返回值
         IPage<StorePageVO> pageInfo = new Page<>(storePageQueryDTO.getCurrent(), storePageQueryDTO.getPageSize());
+
         Circle circle = new Circle(
                 new Point(storePageQueryDTO.getLongitude(), storePageQueryDTO.getLatitude()),
                 new Distance(storePageQueryDTO.getDistance(), Metrics.KILOMETERS)
@@ -68,6 +70,7 @@ public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements
             //todo 附近没有门店的处理方案
         }
 
+        //构建list用来填充page对象的records
         List<StorePageVO> storeList = new ArrayList<>();
         for (GeoResult<RedisGeoCommands.GeoLocation<String>> result : results) {
             RedisGeoCommands.GeoLocation<String> location = result.getContent();
@@ -77,6 +80,8 @@ public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements
             storeList.add(storePageVO);
         }
         pageInfo.setRecords(storeList);
+        pageInfo.setTotal(storeList.size());
+        pageInfo.setPages(storeList.size()/storePageQueryDTO.getPageSize());
         return pageInfo;
     }
 }

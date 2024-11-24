@@ -20,6 +20,7 @@
         <module>robot-member-model</module>
         <module>robot-merchant-model</module>
         <module>robot-sso-model</module>
+        <module>robot-apply-model</module>
     </modules>
 
     <dependencies>
