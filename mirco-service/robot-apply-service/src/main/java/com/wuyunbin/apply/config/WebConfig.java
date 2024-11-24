@@ -13,11 +13,6 @@ public class WebConfig extends WebMvcConfigurationSupport {
 
     @Override
     protected void addInterceptors(InterceptorRegistry registry) {
-//        //采用new对象的形式来注册拦截器对象会脱离SpringBoot管理，DI就失效了（不推荐）
-//        AuthorizationInterceptor authorizationInterceptor = new AuthorizationInterceptor();
-//        System.out.println("========WebConfig=======");
-//        System.out.println(this);
-//        System.out.println("========WebConfig=======");
         registry.addInterceptor(authorizationInterceptor)
                 .addPathPatterns("/**");
     }
