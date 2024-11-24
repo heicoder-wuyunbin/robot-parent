@@ -2,6 +2,8 @@ package com.wuyunbin.sso.service.impl.member;
 
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.wuyunbin.member.api.MemberInfoClient;
+import com.wuyunbin.member.entity.MemberInfo;
 import com.wuyunbin.sso.bo.OpenIdBO;
 import com.wuyunbin.sso.config.WeChatConfig;
 import com.wuyunbin.sso.dto.LoginDTO;
@@ -35,6 +37,8 @@ public class WeChatAuthServiceImpl implements MemberAuthService {
     @Resource
     private MemberService memberService;
 
+    @Resource
+    private MemberInfoClient memberInfoClient;
 
     @Override
     public void sendCode(String phone) {
@@ -62,6 +66,12 @@ public class WeChatAuthServiceImpl implements MemberAuthService {
             member = new Member();
             member.setOpenId(bo.getOpenid());
             memberService.save(member);
+
+            //推入队列
+            MemberInfo memberInfo=new MemberInfo();
+            memberInfo.setId(member.getId());
+            memberInfo.setPhone(member.getPhone());
+            memberInfoClient.save(memberInfo);
         }
 
         //签发token

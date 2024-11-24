@@ -43,6 +43,7 @@ public class StoreController {
     @Operation(summary = "分页查询附近店铺", description = "根据条件分页查询附近店铺，主要提供给小程序端")
     @PostMapping("nearbyPage")
     public Result<IPage<StorePageVO>> getNearbyPage(@RequestBody StorePageQueryDTO storePageQueryDTO){
+        log.info("分页查询附近店铺，参数:{}",storePageQueryDTO);
         IPage<StorePageVO> page= storeService.getNearbyPage(storePageQueryDTO);
         return Result.success(page);
     }

@@ -44,10 +44,7 @@ public class VerificationCodeAuthServiceImpl implements MemberAuthService {
     public void sendCode(String phone) {
         Random random = new Random();
         String code = random.nextInt(8888) + 1000 + "";
-
-
         //redis编排方式： 项目名:模块名:场景名:特征码
-
         //判断手机号格式
         if(phone.length()!=11){
             throw new BusinessException(RespEnum.INVALID_PHONE);
@@ -101,14 +98,7 @@ public class VerificationCodeAuthServiceImpl implements MemberAuthService {
             member.setPhone(loginDTO.getPhone());
             //存入新用户
             memberService.save(member);
-//            //推入队列
-//            HashMap<String,Object> map=new HashMap<>();
-//            map.put("id",member.getId());
-//            map.put("phone",member.getPhone());
-//            String str = JSON.toJSONString(map);
-//            log.info("json字符串:{}",str);
-//            rabbitTemplate.convertAndSend("info",str);
-
+            //推入队列
             MemberInfo memberInfo=new MemberInfo();
             memberInfo.setId(member.getId());
             memberInfo.setPhone(member.getPhone());
