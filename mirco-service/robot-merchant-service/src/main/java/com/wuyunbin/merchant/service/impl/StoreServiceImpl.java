@@ -57,6 +57,17 @@ public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements
         //构建一个page，用在做返回值
         IPage<StorePageVO> pageInfo = new Page<>(storePageQueryDTO.getCurrent(), storePageQueryDTO.getPageSize());
 
+        //判断redis里面有没有数据,没有数据就从数据库查并加入到redis
+        if(!redisTemplate.hasKey("stories")){
+            List<Store> stories = this.lambdaQuery().eq(Store::getStatus, 1).list();
+            for (Store store : stories) {
+                //加入到redis的list中
+                StorePageVO storePageVO = new StorePageVO();
+                BeanUtils.copyProperties(store, storePageVO);
+                redisTemplate.opsForGeo().add("stories", new Point(store.getLongitude(), store.getLatitude()), JSON.toJSONString(storePageVO));
+            }
+        }
+
         Circle circle = new Circle(
                 new Point(storePageQueryDTO.getLongitude(), storePageQueryDTO.getLatitude()),
                 new Distance(storePageQueryDTO.getDistance(), Metrics.KILOMETERS)

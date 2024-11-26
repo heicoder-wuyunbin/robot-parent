@@ -1,7 +1,9 @@
 package com.wuyunbin.sso.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.wuyunbin.sso.dto.AdminLoginDTO;
 import com.wuyunbin.sso.entity.Admin;
+import com.wuyunbin.sso.vo.AdminLoginVO;
 
 
 /**
@@ -14,4 +16,5 @@ import com.wuyunbin.sso.entity.Admin;
  */
 public interface AdminService extends IService<Admin> {
 
+    AdminLoginVO login(AdminLoginDTO adminLoginDTO);
 }
