@@ -7,6 +7,7 @@ import com.wuyunbin.sso.entity.Member;
 import com.wuyunbin.sso.service.MemberAuthService;
 import com.wuyunbin.sso.service.MemberService;
 import com.wuyunbin.sso.utils.JwtUtil;
+import com.wuyunbin.sso.vo.MemberLoginVO;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ public class PasswordAuthServiceImpl implements MemberAuthService {
     }
 
     @Override
-    public String login(LoginDTO loginDTO) {
+    public MemberLoginVO login(LoginDTO loginDTO) {
 
         log.info("账号密码登录方式....");
         Member member = memberService.lambdaQuery()
@@ -44,9 +45,15 @@ public class PasswordAuthServiceImpl implements MemberAuthService {
         if (!member.getPassword().equals(loginDTO.getPassword())) {
             throw new BusinessException(RespEnum.INVALID_ACCOUNT);
         }
+
         HashMap<String,Object> map=new HashMap<>();
         map.put("id",member.getId());
-        return jwtUtil.createToken(map);
+        String token = jwtUtil.createToken(map);
+
+        MemberLoginVO memberLoginVO=new MemberLoginVO();
+        memberLoginVO.setId(member.getId());
+        memberLoginVO.setToken(token);
+        return memberLoginVO;
 
     }
 }

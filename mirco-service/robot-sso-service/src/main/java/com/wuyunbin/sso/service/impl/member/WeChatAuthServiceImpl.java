@@ -11,6 +11,7 @@ import com.wuyunbin.sso.entity.Member;
 import com.wuyunbin.sso.service.MemberAuthService;
 import com.wuyunbin.sso.service.MemberService;
 import com.wuyunbin.sso.utils.JwtUtil;
+import com.wuyunbin.sso.vo.MemberLoginVO;
 import com.wuyunbin.sso.wechat.WeChatAPI;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +47,7 @@ public class WeChatAuthServiceImpl implements MemberAuthService {
     }
 
     @Override
-    public String login(LoginDTO loginDTO) {
+    public MemberLoginVO login(LoginDTO loginDTO) {
         String url = WeChatAPI.jscode2session;
         url = url.replace("{APPID}", weChatConfig.getAppid());
         url = url.replace("{SECRET}", weChatConfig.getSecret());
@@ -74,9 +75,13 @@ public class WeChatAuthServiceImpl implements MemberAuthService {
             memberInfoClient.save(memberInfo);
         }
 
-        //签发token
         HashMap<String,Object> map=new HashMap<>();
         map.put("id",member.getId());
-        return jwtUtil.createToken(map);
+        String token = jwtUtil.createToken(map);
+
+        MemberLoginVO memberLoginVO=new MemberLoginVO();
+        memberLoginVO.setId(member.getId());
+        memberLoginVO.setToken(token);
+        return memberLoginVO;
     }
 }

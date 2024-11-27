@@ -7,13 +7,13 @@ import com.wuyunbin.sso.dto.SendSmsDTO;
 import com.wuyunbin.sso.enums.AuthType;
 import com.wuyunbin.sso.service.MemberAuthService;
 import com.wuyunbin.sso.service.MemberService;
+import com.wuyunbin.sso.vo.MemberLoginVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -40,15 +40,13 @@ public class MemberController {
 
     @Operation(summary = "会员登录")
     @PostMapping("login")
-    public Result<HashMap<String, Object>> login(@RequestBody LoginDTO loginDTO) {
+    public Result<MemberLoginVO> login(@RequestBody LoginDTO loginDTO) {
         log.info("loginDTO:{}", loginDTO);
 
         MemberAuthService memberService = memberAuthServiceHashMap.get(loginDTO.getType());
-        String token =memberService.login(loginDTO);
+        MemberLoginVO memberLoginVO = memberService.login(loginDTO);
 
-        HashMap<String, Object> map=new HashMap<>();
-        map.put("token",token);
-        return Result.success(map);
+        return Result.success(memberLoginVO);
     }
 
     @Operation(summary = "获取验证码")

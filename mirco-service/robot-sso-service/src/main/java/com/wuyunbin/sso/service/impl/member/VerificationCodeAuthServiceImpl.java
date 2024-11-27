@@ -10,6 +10,7 @@ import com.wuyunbin.sso.entity.Member;
 import com.wuyunbin.sso.service.MemberAuthService;
 import com.wuyunbin.sso.service.MemberService;
 import com.wuyunbin.sso.utils.JwtUtil;
+import com.wuyunbin.sso.vo.MemberLoginVO;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -76,7 +77,7 @@ public class VerificationCodeAuthServiceImpl implements MemberAuthService {
     }
 
     @Override
-    public String login(LoginDTO loginDTO) {
+    public MemberLoginVO login(LoginDTO loginDTO) {
         log.info("短信验证码方式...");
         Member member = memberService.lambdaQuery()
                 .eq(Member::getPhone, loginDTO.getPhone())
@@ -109,6 +110,10 @@ public class VerificationCodeAuthServiceImpl implements MemberAuthService {
         HashMap<String,Object> map=new HashMap<>();
         map.put("id",member.getId());
         String token = jwtUtil.createToken(map);
-        return token;
+
+        MemberLoginVO memberLoginVO=new MemberLoginVO();
+        memberLoginVO.setId(member.getId());
+        memberLoginVO.setToken(token);
+        return memberLoginVO;
     }
 }
