@@ -20,6 +20,7 @@
         <module>robot-member-api</module>
         <module>robot-sso-api</module>
         <module>robot-merchant-api</module>
+        <module>robot-base-api</module>
     </modules>
 
     <dependencies>

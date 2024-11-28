@@ -21,4 +21,6 @@ public interface StoreService extends IService<Store> {
     IPage<Store> getPage(StorePageQueryDTO storePageQueryDTO);
 
     IPage<StorePageVO> getNearbyPage(StorePageQueryDTO storePageQueryDTO);
+
+    String generateQrCodeByStoreApplyId(String storeApplyId);
 }

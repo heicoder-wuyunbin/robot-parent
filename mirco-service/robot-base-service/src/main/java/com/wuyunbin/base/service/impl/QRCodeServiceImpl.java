@@ -15,10 +15,10 @@ public class QRCodeServiceImpl implements QRCodeService {
     private QRCodeUtil qrCodeUtil;
 
     @Override
-    public String generateQRCode(QRCode qrCode) {
+    public String generateQRCode(String url) {
         String result="";
         try {
-            result=qrCodeUtil.generateQRCode(qrCode.getText(), qrCode.getSize(), qrCode.getFilePath());
+            result=qrCodeUtil.generateQRCode(url, 300, "");
         } catch (WriterException | IOException e) {
             throw new RuntimeException(e);
         }

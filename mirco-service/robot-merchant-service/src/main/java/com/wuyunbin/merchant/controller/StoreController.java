@@ -51,4 +51,10 @@ public class StoreController {
         Store store = storeService.getById(id);
         return Result.success(store);
     }
+
+    @GetMapping("generateQrCodeByStoreApplyId/{storeApplyId}")
+    public Result<String> generateQrCodeByStoreApplyId(@PathVariable String storeApplyId) {
+        String base64Image= storeService.generateQrCodeByStoreApplyId(storeApplyId);
+        return Result.success(base64Image);
+    }
 }

@@ -5,6 +5,9 @@ import com.alibaba.fastjson2.TypeReference;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.databind.util.BeanUtil;
+import com.wuyunbin.common.Result;
+import com.wuyunbin.common.exceptions.BusinessException;
+import com.wuyunbin.common.exceptions.enums.RespEnum;
 import com.wuyunbin.merchant.dto.StorePageQueryDTO;
 import com.wuyunbin.merchant.entity.Store;
 import com.wuyunbin.merchant.mapper.StoreMapper;
@@ -17,8 +20,13 @@ import org.springframework.data.geo.*;
 import org.springframework.data.redis.connection.RedisGeoCommands;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.wuyunbin.api.BaseClient;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,6 +43,9 @@ public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements
 
     @Resource
     private RedisTemplate<String, String> redisTemplate;
+
+    @Resource
+    private BaseClient baseClient;
 
     @Override
     public void saveStore(Store store) {
@@ -58,7 +69,7 @@ public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements
         IPage<StorePageVO> pageInfo = new Page<>(storePageQueryDTO.getCurrent(), storePageQueryDTO.getPageSize());
 
         //判断redis里面有没有数据,没有数据就从数据库查并加入到redis
-        if(!redisTemplate.hasKey("stories")){
+        if (!redisTemplate.hasKey("stories")) {
             List<Store> stories = this.lambdaQuery().eq(Store::getStatus, 1).list();
             for (Store store : stories) {
                 //加入到redis的list中
@@ -92,7 +103,37 @@ public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements
         }
         pageInfo.setRecords(storeList);
         pageInfo.setTotal(storeList.size());
-        pageInfo.setPages(storeList.size()/storePageQueryDTO.getPageSize());
+        pageInfo.setPages(storeList.size() / storePageQueryDTO.getPageSize());
         return pageInfo;
     }
+
+    @Override
+    public String generateQrCodeByStoreApplyId(String storeApplyId) {
+        Store store = this.lambdaQuery().eq(Store::getStoreApplyId, storeApplyId).one();
+        if (store == null) {
+            throw new BusinessException(RespEnum.INVALID_PARAMETERS);
+        }
+
+        String url = "/pages/pay/index/index?merchantId=${MID}&storeId=${SID}";
+        url = url.replace("${MID}", store.getMerchantId())
+                .replace("${SID}", store.getId());
+        url = Base64.getEncoder().encodeToString(url.getBytes());
+
+        String base64Image = baseClient.generateQRCode(url);
+
+        return base64Image;
+    }
+
+    public static void main(String[] args) {
+        String url = "/pages/pay/index/index?merchantId=${MID}&storeId=${SID}";
+//        String encode = URLEncoder.encode(url, StandardCharsets.UTF_8);
+//
+//        String decode = URLDecoder.decode(encode, StandardCharsets.UTF_8);
+
+        String encode = Base64.getEncoder().encodeToString(url.getBytes());
+        String decode = new String(Base64.getDecoder().decode(encode));
+        System.out.println(encode);
+        System.out.println(decode);
+    }
+
 }
