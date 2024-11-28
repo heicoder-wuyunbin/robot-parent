@@ -10,10 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -46,5 +43,12 @@ public class StoreController {
         log.info("分页查询附近店铺，参数:{}",storePageQueryDTO);
         IPage<StorePageVO> page= storeService.getNearbyPage(storePageQueryDTO);
         return Result.success(page);
+    }
+
+    @Operation(summary = "根据id查询店铺", description = "根据id查询店铺")
+    @GetMapping("{id}")
+    public Result<Store> getStoreById(@PathVariable String id){
+        Store store = storeService.getById(id);
+        return Result.success(store);
     }
 }
